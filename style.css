@@ -1,0 +1,38 @@
+html {
+    width:100%;
+    height: 100%;
+}
+
+body {
+    width:100%;
+    height: 100%;
+    margin: 0;
+}
+
+.main-container {
+    width:100%;
+    height:100%;
+    display:grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-areas: "test test1 test2";
+    /* background:black; */
+}
+
+.test{
+    grid-area: test;
+    background:green;
+}
+
+.test1{
+    grid-area: test1;
+    background: white;;
+}
+
+.test2{
+    grid-area: test2;
+    background:yellow;
+}
+
+.a::first-line{
+    white-space: pre-line;
+}
