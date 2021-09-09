@@ -36,3 +36,8 @@ body {
 .a::first-line{
     white-space: pre-line;
 }
+
+#code p{
+    margin:0;
+    tab-size: 4;
+}
