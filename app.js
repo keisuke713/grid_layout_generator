@@ -1,28 +1,3 @@
-// const node = document.getElementById("test1-2");
-// node.innerHTML = `
-// <pre>
-//     <code>
-//         &lt;div&gt;
-//             &lt;p&gt;keisuke&lt;/p&gt;
-//         &lt;/div&gt;
-//     </code>
-// </pre>
-// `
-// const pre = document.createElement("pre");
-// const code = document.createElement("code");
-// code.setAttribute("id", "code");
-// const div = document.createElement("div");
-// const p   = document.createElement("p");
-
-// p.innerText = "test";
-// div.append(p);
-// div.innerHTML = div.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-// code.append(div);
-// code.innerHTML = code.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-// pre.append(code);
-// node.append(pre);
-
 const parseHtmlString = (html) => {
     const arr = html.split(/\<|\>/).filter(str => str.length > 0);
     const stack = [];
@@ -48,4 +23,24 @@ document.getElementById("translate").addEventListener("click", function(){
     const input = document.getElementById("code-input").value;
     const code  = document.getElementById("code");
     code.innerHTML = parseHtmlString(input);
+})
+
+// これどうしようかー
+// ======================== copyは今後弄るから保留 ========================
+document.getElementById("copy").addEventListener("click", function(){
+    const code  = document.getElementById("code");
+
+    const copyTextarea = document.getElementById("test")
+    copyTextarea.value = code.innerHTML;
+
+    copyTextarea.focus();
+    copyTextarea.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        const msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Copying text command was ' + msg);
+    } catch (err) {
+        console.log('Oops, unable to copy');
+    }
 })
