@@ -48,15 +48,35 @@
 
 // ================== nodeの定義 ==========================
 class DOM{
-    constructor(head, htmlParentNode){
+    constructor(head, htmlParentNode, cssParentNode){
         this.head           = head;
         this.htmlParentNode = htmlParentNode;
+        this.cssParentNode  = cssParentNode;
     }
     print(){
         this.printHelper(this.head);
     }
     printHelper(currNode){
         this.htmlParentNode.append(currNode.createFirstTag());
+
+        // ==================== スタイル定義 ==========================
+        // ==================== リファクタは後ほど ==========================
+
+        const a = document.createElement("p");
+        a.innerText = `#${currNode.id}{\n`
+        this.cssParentNode.append(a);
+
+        currNode.style.forEach(currStyle => {
+            const c = document.createElement("p");
+            c.innerText = `\t${currStyle.getOrDefault("property", "")}: ${currStyle.getOrDefault("value", "")}${currStyle.getOrDefault("unit","")};\n`
+            this.cssParentNode.append(c);
+        })
+
+        const b = document.createElement("p");
+        b.innerText = `}\n`;
+        this.cssParentNode.append(b);
+
+        // ==================== スタイル定義 ==========================
     
         currNode.childNode.forEach(node => {
             this.printHelper(node);
@@ -69,7 +89,7 @@ class DOM{
 class Node{
     static space = "\t"
     static newLine = "\n"
-    
+
     constructor(id, tag, style, text, depth){
         this.id        = id;
         this.tag       = tag;
@@ -91,6 +111,22 @@ class Node{
     }
 }
 
+class HashMap{
+    constructor(){
+        this.map = new Map();
+    }
+    set(key, value){
+        this.map.set(key, value);
+    }
+    getOrDefault(key, defaultValue){
+        if(!this.map.has(key)) return defaultValue;
+        return this.map.get(key);
+    }
+    delete(key){
+        this.map.delete(key);
+    }
+}
+
 const node0 = new Node(0, "div", [], "top", 0, []);
 const node1 = new Node(1, "div", [], "", 1, []);
 const node2 = new Node(2, "div", [], "", 2, []);
@@ -108,10 +144,15 @@ node6.childNode.push(node7);
 node0.childNode.push(node1);
 node0.childNode.push(node6);
 
+const map = new HashMap();
+map.set("property", "display");
+map.set("value", "grid");
+node0.style.push(map);
+
 const pre  = document.getElementById("pre");
 const code  = document.getElementById("code");
 
-const dom = new DOM(node0, code);
+const dom = new DOM(node0, code, document.getElementById("code2"));
 
 console.log(dom);
 

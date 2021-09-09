@@ -37,7 +37,7 @@ body {
     white-space: pre-line;
 }
 
-#code p{
+code p{
     margin:0;
     tab-size: 4;
 }
