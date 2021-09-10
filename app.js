@@ -48,41 +48,28 @@
 
 // ================== nodeの定義 ==========================
 class DOM{
-    constructor(head, htmlParentNode, cssParentNode){
+    constructor(head, htmlParentNode, styleParentNode){
         this.head           = head;
         this.htmlParentNode = htmlParentNode;
-        this.cssParentNode  = cssParentNode;
+        this.styleParentNode  = styleParentNode;
     }
     print(){
         this.printHelper(this.head);
     }
     printHelper(currNode){
-        this.htmlParentNode.append(currNode.createFirstTag());
+        this.htmlParentNode.append(currNode.createFirstHtmlTag());
 
-        // ==================== スタイル定義 ==========================
-        // ==================== リファクタは後ほど ==========================
-
-        const a = document.createElement("p");
-        a.innerText = `#${currNode.id}{\n`
-        this.cssParentNode.append(a);
-
-        currNode.style.forEach(currStyle => {
-            const c = document.createElement("p");
-            c.innerText = `\t${currStyle.getOrDefault("property", "")}: ${currStyle.getOrDefault("value", "")}${currStyle.getOrDefault("unit","")};\n`
-            this.cssParentNode.append(c);
-        })
-
-        const b = document.createElement("p");
-        b.innerText = `}\n`;
-        this.cssParentNode.append(b);
-
-        // ==================== スタイル定義 ==========================
+        this.styleParentNode.append(currNode.createFirstStyleTag());
+        for(const style of currNode.createStyleBodies()){
+            this.styleParentNode.append(style);
+        }
+        this.styleParentNode.append(currNode.createLastStyleTag());
     
         currNode.childNode.forEach(node => {
             this.printHelper(node);
         });
 
-        this.htmlParentNode.append(currNode.createLastTag());
+        this.htmlParentNode.append(currNode.createLastHtmlTag());
     }
 }
 
@@ -98,15 +85,32 @@ class Node{
         this.depth     = depth;
         this.childNode = [];
     }
-    createFirstTag(){
+    createFirstHtmlTag(){
         const tag = document.createElement("p");
         tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag}${this.id}>`
         if(this.text.length > 0) tag.innerText += `${Node.newLine}${Node.space.repeat(this.depth + 1)}${this.text}`
         return tag;
     }
-    createLastTag(){
+    createLastHtmlTag(){
         const tag = document.createElement("p");
         tag.innerText =`${Node.space.repeat(this.depth)}</${this.tag}${this.id}>`
+        return tag;
+    }
+    createFirstStyleTag(){
+        const tag = document.createElement("p");
+        tag.innerText = `#${this.id}{`;
+        return tag;
+    }
+    createStyleBodies(){
+        return this.style.map(currStyle => {
+            const body = document.createElement("p");
+            body.innerText = `${Node.space}${currStyle.getOrDefault("property", "")}: ${currStyle.getOrDefault("value", "")}${currStyle.getOrDefault("unit","")};`
+            return body;
+        })
+    }
+    createLastStyleTag(){
+        const tag = document.createElement("p");
+        tag.innerText = `}`;
         return tag;
     }
 }
@@ -147,12 +151,18 @@ node0.childNode.push(node6);
 const map = new HashMap();
 map.set("property", "display");
 map.set("value", "grid");
+
+const map2 = new HashMap();
+map2.set("property", "width");
+map2.set("value", "95");
+map2.set("unit", "%");
+
 node0.style.push(map);
+node0.style.push(map2);
 
-const pre  = document.getElementById("pre");
-const code  = document.getElementById("code");
+node7.style.push(map2);
 
-const dom = new DOM(node0, code, document.getElementById("code2"));
+const dom = new DOM(node0, document.getElementById("code"), document.getElementById("code2"));
 
 console.log(dom);
 
