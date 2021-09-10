@@ -26,25 +26,6 @@
 //     code.innerHTML = parseHtmlString(input);
 // })
 
-// これどうしようかー
-// ======================== copyは今後弄るから保留 ========================
-// document.getElementById("copy").addEventListener("click", function(){
-//     const code  = document.getElementById("code");
-
-//     const copyTextarea = document.getElementById("test")
-//     copyTextarea.value = code.innerHTML;
-
-//     copyTextarea.focus();
-//     copyTextarea.select();
-
-//     try {
-//         const successful = document.execCommand('copy');
-//         const msg = successful ? 'successful' : 'unsuccessful';
-//         console.log('Copying text command was ' + msg);
-//     } catch (err) {
-//         console.log('Oops, unable to copy');
-//     }
-// })
 
 // ================== nodeの定義 ==========================
 class DOM{
@@ -167,3 +148,17 @@ const dom = new DOM(node0, document.getElementById("code"), document.getElementB
 console.log(dom);
 
 dom.print();
+
+let str = document.getElementById("code").innerText;
+str = str.replace("\n", "").replace(/\n\n/g, "\n");
+
+document.getElementById("copy").addEventListener("click", () => {
+    navigator.clipboard.writeText(str);
+})
+
+let str2 = document.getElementById("code2").innerText;
+str2 = str2.replace("\n", "").replace(/\n\n/g, "\n");
+
+document.getElementById("copy2").addEventListener("click", () => {
+    navigator.clipboard.writeText(str2);
+})
