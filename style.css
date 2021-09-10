@@ -33,10 +33,7 @@ body {
     background:yellow;
 }
 
-.a::first-line{
-    white-space: pre-line;
-}
-
+/* コードを表示する場所のpタグはmargiを0にする */
 code p{
     margin:0;
     tab-size: 4;
