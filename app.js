@@ -149,6 +149,9 @@ console.log(dom);
 
 dom.print();
 
+
+// ======================= htmlとstyleをコピーするイベントリスナー ============================
+
 let str = document.getElementById("code").innerText;
 str = str.replace("\n", "").replace(/\n\n/g, "\n");
 
