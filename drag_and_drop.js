@@ -152,17 +152,24 @@ function addDivEle(){
 //         console.log("done");
 //     }
 // }
-
 function mousedown(event){
+    if(event.shiftKey === true) mousedownForResize(event);
+    else mousedownForDrag(event);
+}
+
+function mousedownForDrag(event){
+    console.log("drag");
     console.log("mousedown");
-    this.classList.add("drag");
+
+    const ele = event.target;
+    ele.classList.add("drag");
 
     if(event.type !== "mousedown") event = event.changedTouches[0];
 
-    const x = event.pageX - this.offsetLeft;
-    const y = event.pageY - this.offsetTop;
+    const x = event.pageX - ele.offsetLeft;
+    const y = event.pageY - ele.offsetTop;
 
-    function mousemove(event){
+    function mousemoveForDrag(event){
         console.log("mousemove");
 
         const drag = document.getElementsByClassName("drag")[0];
@@ -175,28 +182,32 @@ function mousedown(event){
         drag.style.left = event.pageX - x + "px";
     }
 
-    document.body.addEventListener("mousemove", mousemove, false);
-    document.body.addEventListener("touchmove", mousemove, false);
+    document.body.addEventListener("mousemove", mousemoveForDrag, false);
+    document.body.addEventListener("touchmove", mousemoveForDrag, false);
 
-    function mouseup(event){
+    function mouseupForDrag(event){
         console.log("mouseup");
         const drag = document.getElementsByClassName("drag")[0];
 
-        document.body.removeEventListener("mousemove", mousemove, false);
-        drag.removeEventListener("mouseup", mouseup, false);
-        document.body.removeEventListener("touchmove", mousemove, false);
-        drag.removeEventListener("toucend", mouseup, false);
+        document.body.removeEventListener("mousemove", mousemoveForDrag, false);
+        drag.removeEventListener("mouseup", mouseupForDrag, false);
+        document.body.removeEventListener("touchmove", mousemoveForDrag, false);
+        drag.removeEventListener("toucend", mouseupForDrag, false);
 
         // 追加で記述
-        document.body.removeEventListener("mouseleave", mouseup, false);
-        document.body.removeEventListener("touchleave", mouseup, false);
+        document.body.removeEventListener("mouseleave", mouseupForDrag, false);
+        document.body.removeEventListener("touchleave", mouseupForDrag, false);
 
         drag.classList.remove("drag");
         console.log("done");
     }
 
-    this.addEventListener("mouseup", mouseup, false);
-    document.body.addEventListener("mouseleave", mouseup, false);
-    this.addEventListener("touchend", mouseup, false);
-    document.body.addEventListener("touchleave", mouseup, false);
+    ele.addEventListener("mouseup", mouseupForDrag, false);
+    document.body.addEventListener("mouseleave", mouseupForDrag, false);
+    ele.addEventListener("touchend", mouseupForDrag, false);
+    document.body.addEventListener("touchleave", mouseupForDrag, false);
+}
+
+function mousedownForResize(event){
+    console.log("resize");
 }
