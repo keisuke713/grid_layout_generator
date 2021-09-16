@@ -95,39 +95,6 @@ const dom = new DOM(node0, document.getElementById("code"), document.getElementB
 //     };
 // }
 
-// box.onmousedown = (event) => {
-//     box.style.border = "3px solid red";
-//     box.style.zIndex = 1000;
-//     document.body.append(box);
-
-//     const shiftY  = event.pageY - box.offsetTop;
-//     const shiftX = event.pageX - box.offsetLeft;
-
-//     moveAt(event.pageX, event.pageY);
-
-//     function moveAt(pageX, pageY){
-//         box.style.left = (pageX - shiftX) + "px";
-//         box.style.top  = (pageY - shiftY) + "px";
-//     }
-
-//     function onMouseMove(event){
-//         moveAt(event.pageX, event.pageY);
-//     }
-
-//     document.addEventListener("mousemove", onMouseMove);
-
-//     box.onmouseup = () => {
-//         document.removeEventListener('mousemove', onMouseMove);
-//         box.onmouseup = null;
-//         box.style.border = "none";
-//     }
-// }
-
-// box.ondragstart = function() {
-//     return false;
-// };
-
-
 // =================== new ====================
 // (function(){
 //     console.log("test");
@@ -211,54 +178,90 @@ const dom = new DOM(node0, document.getElementById("code"), document.getElementB
 //     }
 // })()
 
-// document.getElementById("add").addEventListener("click", () => {
-//     const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple"];
-//     const div = document.createElement("div");
-//     div.classList.add("box");
-//     div.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-//     addMoveEvent(div);
-//     document.getElementById("test1").append(div);
-// })
-
 function addDivEle(){
-    const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple"];
+    const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple", "orange", "chartreuse"];
     const div = document.createElement("div");
     div.classList.add("box");
-    div.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const index = Math.floor(Math.random() * colors.length)
+    div.style.background = colors[index];
 
-    addMoveEvent(div);
+    // addMoveEvent(div);
+    div.addEventListener("mousedown", mousedown, false);
+    div.addEventListener("touchstart", mousedown, false);
     document.getElementById("test1").append(div);
 }
 
-function addMoveEvent(ele){
-    // 要素ないのクリックされた位置を取得する変数
-    let x;
-    let y;
+// function addMoveEvent(ele){
+//     // 要素ないのクリックされた位置を取得する変数
+//     let x;
+//     let y;
 
-    // mousedownまたはtouchdstartのイベント定義
-    ele.addEventListener("mousedown", mousedown, false);
-    ele.addEventListener("touchstart", mousedown, false);
+//     // mousedownまたはtouchdstartのイベント定義
+//     ele.addEventListener("mousedown", mousedown, false);
+//     ele.addEventListener("touchstart", mousedown, false);
 
-    function mousedown(event){
-        console.log("mousedown");
-        this.classList.add("drag");
+//     function mousedown(event){
+//         console.log("mousedown");
+//         this.classList.add("drag");
 
-        if(event.type !== "mousedown") event = event.changedTouches[0];
-        console.log(event);
+//         if(event.type !== "mousedown") event = event.changedTouches[0];
+//         console.log(event);
 
-        x = event.pageX - this.offsetLeft;
-        y = event.pageY - this.offsetTop;
+//         x = event.pageX - this.offsetLeft;
+//         y = event.pageY - this.offsetTop;
 
-        document.body.addEventListener("mousemove", mousemove, false);
-        document.body.addEventListener("touchmove", mousemove, false);
-    }
+//         document.body.addEventListener("mousemove", mousemove, false);
+//         document.body.addEventListener("touchmove", mousemove, false);
+//     }
+
+//     function mousemove(event){
+//         console.log("mousemove");
+
+//         // mousedown内でイベントを追加する時にbodyではなくboxにしたらここはthisで行ける？
+//         // その場合ドラッグできる範囲はどうなる？
+//         const drag = document.getElementsByClassName("drag")[0];
+
+//         if(event.type !== "mousemove") event = event.changedTouches[0];
+
+//         event.preventDefault();
+
+//         drag.style.top  = event.pageY - y + "px";
+//         drag.style.left = event.pageX - x + "px";
+
+//         drag.addEventListener("mouseup", mouseup, false);
+//         document.body.addEventListener("mouseleave", mouseup, false);
+//         drag.addEventListener("touchend", mouseup, false);
+//         document.body.addEventListener("touchleave", mouseup, false);
+//     }
+
+//     function mouseup(event){
+//         console.log("mouseup");
+//         const drag = document.getElementsByClassName("drag")[0];
+
+//         document.body.removeEventListener("mousemove", mousemove, false);
+//         drag.removeEventListener("mouseup", mouseup, false);
+//         document.body.removeEventListener("touchmove", mousemove, false);
+//         drag.removeEventListener("touchend", mouseup, false);
+
+//         console.log(document.getElementById("test1").offsetWidth);
+//         console.log(drag);
+//         drag.classList.remove("drag");
+//         console.log("done");
+//     }
+// }
+
+function mousedown(event){
+    console.log("mousedown");
+    this.classList.add("drag");
+
+    if(event.type !== "mousedown") event = event.changedTouches[0];
+
+    const x = event.pageX - this.offsetLeft;
+    const y = event.pageY - this.offsetTop;
 
     function mousemove(event){
         console.log("mousemove");
 
-        // mousedown内でイベントを追加する時にbodyではなくboxにしたらここはthisで行ける？
-        // その場合ドラッグできる範囲はどうなる？
         const drag = document.getElementsByClassName("drag")[0];
 
         if(event.type !== "mousemove") event = event.changedTouches[0];
@@ -267,12 +270,10 @@ function addMoveEvent(ele){
 
         drag.style.top  = event.pageY - y + "px";
         drag.style.left = event.pageX - x + "px";
-
-        drag.addEventListener("mouseup", mouseup, false);
-        document.body.addEventListener("mouseleave", mouseup, false);
-        drag.addEventListener("touchend", mouseup, false);
-        document.body.addEventListener("touchleave", mouseup, false);
     }
+
+    document.body.addEventListener("mousemove", mousemove, false);
+    document.body.addEventListener("touchmove", mousemove, false);
 
     function mouseup(event){
         console.log("mouseup");
@@ -281,10 +282,18 @@ function addMoveEvent(ele){
         document.body.removeEventListener("mousemove", mousemove, false);
         drag.removeEventListener("mouseup", mouseup, false);
         document.body.removeEventListener("touchmove", mousemove, false);
-        drag.removeEventListener("touchend", mouseup, false);
+        drag.removeEventListener("toucend", mouseup, false);
 
-        console.log(drag);
+        // 追加で記述
+        document.body.removeEventListener("mouseleave", mouseup, false);
+        document.body.removeEventListener("touchleave", mouseup, false);
+
         drag.classList.remove("drag");
         console.log("done");
     }
+
+    this.addEventListener("mouseup", mouseup, false);
+    document.body.addEventListener("mouseleave", mouseup, false);
+    this.addEventListener("touchend", mouseup, false);
+    document.body.addEventListener("touchleave", mouseup, false);
 }
