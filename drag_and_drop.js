@@ -158,9 +158,6 @@ function mousedown(event){
 }
 
 function mousedownForDrag(event){
-    console.log("drag");
-    console.log("mousedown");
-
     const ele = event.target;
     ele.classList.add("drag");
 
@@ -170,8 +167,6 @@ function mousedownForDrag(event){
     const y = event.pageY - ele.offsetTop;
 
     function mousemoveForDrag(event){
-        console.log("mousemove");
-
         const drag = document.getElementsByClassName("drag")[0];
 
         if(event.type !== "mousemove") event = event.changedTouches[0];
@@ -186,7 +181,6 @@ function mousedownForDrag(event){
     document.body.addEventListener("touchmove", mousemoveForDrag, false);
 
     function mouseupForDrag(event){
-        console.log("mouseup");
         const drag = document.getElementsByClassName("drag")[0];
 
         document.body.removeEventListener("mousemove", mousemoveForDrag, false);
@@ -199,7 +193,6 @@ function mousedownForDrag(event){
         document.body.removeEventListener("touchleave", mouseupForDrag, false);
 
         drag.classList.remove("drag");
-        console.log("done");
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
@@ -209,8 +202,44 @@ function mousedownForDrag(event){
 }
 
 function mousedownForResize(event){
-    console.log("resize");
-
     const ele = event.target;
     ele.classList.add("resize");
+
+    if(event.type !== "mousedown") event = event.changedTouches[0];
+
+    const x = (ele.offsetLeft + ele.offsetWidth) - event.pageX;
+    const y = (ele.offsetTop + ele.offsetHeight) - event.pageY;
+
+    function mousemoveForResize(event){
+        const resize = document.getElementsByClassName("resize")[0];
+
+        if(event.type !== "mousemove") event = event.changedTouches[0];
+
+        event.preventDefault();
+
+        resize.style.width  = (event.pageX - resize.offsetLeft) + x + "px";
+        resize.style.height = (event.pageY - resize.offsetTop) + y + "px";
+    }
+
+    document.body.addEventListener("mousemove", mousemoveForResize, false);
+    document.body.addEventListener("touchmove", mousemoveForResize, false);
+
+    function mouseupForResize(event){
+        const resize = document.getElementsByClassName("resize")[0];
+
+        document.body.removeEventListener("mousemove", mousemoveForResize, false);
+        resize.removeEventListener("mouseup", mouseupForResize, false);
+        document.body.removeEventListener("touchmove", mousemoveForResize, false);
+        resize.removeEventListener("touchend", mouseupForResize, false);
+
+        document.body.removeEventListener("mouseleave", mouseupForResize, false);
+        document.body.removeEventListener("touchleave", mouseupForResize, false);
+
+        resize.classList.remove("resize");
+    }
+
+    ele.addEventListener("mouseup", mouseupForResize, false);
+    document.body.removeEventListener("mouseleave", mouseupForResize, false);
+    ele.addEventListener("touchend", mouseupForResize, false);
+    document.body.addEventListener("touchleave", mouseupForResize, false);
 }
