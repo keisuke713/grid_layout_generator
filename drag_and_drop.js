@@ -210,4 +210,7 @@ function mousedownForDrag(event){
 
 function mousedownForResize(event){
     console.log("resize");
+
+    const ele = event.target;
+    ele.classList.add("resize");
 }

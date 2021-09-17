@@ -44,11 +44,20 @@ body {
     z-index: 0;
     border-radius: 20px;
 }
-/* mousedownした時につけるクラス */
+/* dragする時につけるクラス */
 .drag{
     z-index: 1000;
     border:3px solid red;
+    cursor: move;
 }
+
+/* resizeする時につけるクラス */
+.resize{
+    z-index: 1000;
+    border:3px solid red;
+    cursor: nwse-resize;
+}
+
 /* コードを表示する場所のpタグはmargiを0にする */
 code p{
     margin:0;
