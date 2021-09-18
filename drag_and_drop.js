@@ -85,6 +85,18 @@ function addDivEle(){
     const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple", "orange", "chartreuse"];
     const div = document.createElement("div");
     div.classList.add("box");
+
+    // 現在はここに書いているが実際は画面上で親要素を選べるようにする
+    // const child = document.createElement("div");
+    // child.style.width = "100px";
+    // child.style.height = "100px";
+    // child.style.border = "1px solid black";
+    // child.style.position = "absolute";
+    // child.style.top = "20px";
+    // child.style.left = "20px";
+    // div.append(child);
+
+
     const index = Math.floor(Math.random() * colors.length)
     div.style.background = colors[index];
 
@@ -153,7 +165,10 @@ function addDivEle(){
 //     }
 // }
 function mousedown(event){
-    if(event.shiftKey === true) mousedownForResize(event);
+    const resizeRange = 30;
+    const client = event.target.getBoundingClientRect();
+
+    if(client.top + client.height - resizeRange <= event.pageY && client.left + client.width - resizeRange <= event.pageX) mousedownForResize(event);
     else mousedownForDrag(event);
 }
 
