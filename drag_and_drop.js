@@ -80,37 +80,6 @@
 //         drag.classList.remove("drag");
 //     }
 // })()
-const parentEle = document.getElementById("test1");
-// const parentEle = "test1";
-let selectedEle = parentEle;
-const selectedEleInfo = document.getElementById("selectedEleInfo");
-
-let numberOfBoxes = 0;
-const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple", "orange", "chartreuse", "pink"];
-function addDivEle(){
-    numberOfBoxes += 1;
-    const div = document.createElement("div");
-    div.classList.add("box");
-    div.setAttribute("id", `ele${numberOfBoxes}`);
-
-    let index = Math.floor(Math.random() * colors.length);
-    while(selectedEle.style.background == colors[index]){
-        index = Math.floor(Math.random() * colors.length);
-    }
-    // while(document.getElementById(selectedEle).style.background == colors[index]){
-    //     index = Math.floor(Math.random() * colors.length);
-    // }
-    div.style.background = colors[index];
-
-    div.addEventListener("mousedown", mousedown, false);
-    div.addEventListener("touchstart", mousedown, false);
-    div.addEventListener("click", clickEle,false);
-
-    selectedEle.append(div);
-    // document.getElementById(selectedEle).append(div);
-    selectedEle = parentEle;
-    selectedEleInfo.innerText = ""
-}
 
 // function addMoveEvent(ele){
 //     // 要素ないのクリックされた位置を取得する変数
@@ -170,14 +139,45 @@ function addDivEle(){
 //         console.log("done");
 //     }
 // }
+
+const parentEle = document.getElementById("test1");
+const selectedEleInfo = document.getElementById("selectedEleInfo");
+let selectedEle = parentEle;
+updateSelectedEle(selectedEle, "")
+
+let numberOfBoxes = 0;
+const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple", "orange", "chartreuse", "pink"];
+function addDivEle(){
+    numberOfBoxes += 1;
+
+    // 新しいdiv要素を作成
+    const div = document.createElement("div");
+    div.classList.add("box");
+    div.setAttribute("id", `ele${numberOfBoxes}`);
+
+    // 親要素の被らないカラーを取得
+    let index = Math.floor(Math.random() * colors.length);
+    // variable version
+    while(selectedEle.style.background == colors[index]){
+        index = Math.floor(Math.random() * colors.length);
+    }
+    div.style.background = colors[index];
+
+    div.addEventListener("mousedown", mousedown, false);
+    div.addEventListener("touchstart", mousedown, false);
+    div.addEventListener("click", clickEle,false);
+
+    selectedEle.append(div);
+
+    // 選択中の要素を更新
+    updateSelectedEle(parentEle, "");
+}
 function clickEle(event){
-    if(event.shiftKey == false) return;
-    console.log("click");
-    console.log(event);
-    selectedEle = event.target;
-    selectedEleInfo.innerText = selectedEle.getAttribute("id");
-    // selectedEle = event.target.getAttribute("id");
-    // selectedEleInfo.innerText = document.getElementById(selectedEle).getAttribute("id");
+    if(event.shiftKey == false){
+        updateSelectedEle(parentEle, "");
+    }else{
+        updateSelectedEle(event.target, selectedEle.getAttribute("id"));
+    }
 }
 function mousedown(event){
     const resizeRange = 30;
@@ -188,7 +188,6 @@ function mousedown(event){
 }
 
 function mousedownForDrag(event){
-    console.log(event);
     event.stopPropagation();
     const ele = event.target;
     ele.classList.add("drag");
@@ -225,9 +224,6 @@ function mousedownForDrag(event){
         document.body.removeEventListener("touchleave", mouseupForDrag, false);
 
         drag.classList.remove("drag");
-        selectedEle = parentEle;
-        selectedEleInfo.innerText = ""
-        console.log(selectedEle);
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
@@ -237,7 +233,6 @@ function mousedownForDrag(event){
 }
 
 function mousedownForResize(event){
-    console.log(event);
     event.stopPropagation();
 
     const ele = event.target;
@@ -274,8 +269,6 @@ function mousedownForResize(event){
         document.body.removeEventListener("touchleave", mouseupForResize, false);
 
         resize.classList.remove("resize");
-        selectedEle = parentEle;
-        selectedEleInfo.innerText = ""
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -284,7 +277,9 @@ function mousedownForResize(event){
     document.body.addEventListener("touchleave", mouseupForResize, false);
 }
 
-function updateSelectedEle(ele){
-    // selectedEle = ele;
-    // se
+function updateSelectedEle(ele, text){
+    selectedEle.classList.remove("selected");
+    selectedEle = ele;
+    selectedEle.classList.add("selected");
+    selectedEleInfo.innerText = text;
 }

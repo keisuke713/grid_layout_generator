@@ -58,6 +58,11 @@ body {
     cursor: nwse-resize;
 }
 
+/* 選択されている要素につけるクラス */
+.selected{
+    border:3px solid black;
+}
+
 /* コードを表示する場所のpタグはmargiを0にする */
 code p{
     margin:0;
