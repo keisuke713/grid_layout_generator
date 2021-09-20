@@ -139,14 +139,10 @@
 //         console.log("done");
 //     }
 // }
-
-const parentEle = document.getElementById("test1");
-const selectedEleInfo = document.getElementById("selectedEleInfo");
-let selectedEle = parentEle;
+let selectedEle = config.parentEle;
 updateSelectedEle(selectedEle, "")
 
 let numberOfBoxes = 0;
-const colors = ["green", "yellow", "burlywood", "blue", "skyblue", "purple", "orange", "chartreuse", "pink"];
 function addDivEle(){
     numberOfBoxes += 1;
 
@@ -156,12 +152,11 @@ function addDivEle(){
     div.setAttribute("id", `ele${numberOfBoxes}`);
 
     // 親要素の被らないカラーを取得
-    let index = Math.floor(Math.random() * colors.length);
-    // variable version
-    while(selectedEle.style.background == colors[index]){
-        index = Math.floor(Math.random() * colors.length);
+    let index = Math.floor(Math.random() * config.elementColors.length);
+    while(selectedEle.style.background == config.elementColors[index]){
+        index = Math.floor(Math.random() * config.elementColors.length);
     }
-    div.style.background = colors[index];
+    div.style.background = config.elementColors[index];
 
     div.addEventListener("mousedown", mousedown, false);
     div.addEventListener("touchstart", mousedown, false);
@@ -169,16 +164,16 @@ function addDivEle(){
 
     selectedEle.append(div);
 
-    // 選択中の要素を更新
-    updateSelectedEle(parentEle, "");
+    updateSelectedEle(config.parentEle, "");
 }
 function clickEle(event){
     if(event.shiftKey == false){
-        updateSelectedEle(parentEle, "");
+        updateSelectedEle(config.parentEle, "");
     }else{
         updateSelectedEle(event.target, selectedEle.getAttribute("id"));
     }
 }
+
 function mousedown(event){
     const resizeRange = 30;
     const client = event.target.getBoundingClientRect();
@@ -281,5 +276,5 @@ function updateSelectedEle(ele, text){
     selectedEle.classList.remove("selected");
     selectedEle = ele;
     selectedEle.classList.add("selected");
-    selectedEleInfo.innerText = text;
+    config.selectedEleInfo.innerText = text;
 }
