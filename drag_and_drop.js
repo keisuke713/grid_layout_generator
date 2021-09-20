@@ -140,7 +140,7 @@
 //     }
 // }
 let selectedEle = config.parentEle;
-updateSelectedEle(selectedEle, "")
+updateSelectedEle(selectedEle)
 
 let numberOfBoxes = 0;
 function addDivEle(){
@@ -164,13 +164,13 @@ function addDivEle(){
 
     selectedEle.append(div);
 
-    updateSelectedEle(config.parentEle, "");
+    updateSelectedEle(config.parentEle);
 }
 function clickEle(event){
     if(event.shiftKey == false){
-        updateSelectedEle(config.parentEle, "");
+        updateSelectedEle(config.parentEle);
     }else{
-        updateSelectedEle(event.target, selectedEle.getAttribute("id"));
+        updateSelectedEle(event.target);
     }
 }
 
@@ -272,9 +272,11 @@ function mousedownForResize(event){
     document.body.addEventListener("touchleave", mouseupForResize, false);
 }
 
-function updateSelectedEle(ele, text){
+function updateSelectedEle(ele){
     selectedEle.classList.remove("selected");
     selectedEle = ele;
     selectedEle.classList.add("selected");
-    config.selectedEleInfo.innerText = text;
+
+    if(config.parentEle === selectedEle) config.selectedEleInfo.innerText = "";
+    else config.selectedEleInfo.innerText = selectedEle.getAttribute("id");
 }
