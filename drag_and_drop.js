@@ -149,7 +149,10 @@ function addDivEle(){
     // 新しいdiv要素を作成
     const div = document.createElement("div");
     div.classList.add("box");
+    div.style.height = `${config.height}px`;
+    div.style.width = `${config.width}px`;
     div.setAttribute("id", `ele${numberOfBoxes}`);
+    div.innerText = numberOfBoxes;
 
     // 親要素の被らないカラーを取得
     let index = Math.floor(Math.random() * config.elementColors.length);
@@ -162,7 +165,54 @@ function addDivEle(){
     div.addEventListener("touchstart", mousedown, false);
     div.addEventListener("click", clickEle,false);
 
-    selectedEle.append(div);
+    // ↓子の要素をソート
+    const childs = [];
+    for(const child of selectedEle.querySelectorAll(".box")){
+        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+    }
+
+    childs.sort((a,b) => {
+        if(a.offsetTop < b.offsetTop) return -1;
+        if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
+        return 1;
+    });
+    // ↑子の要素をソート
+
+    let top = config.gap;
+    let left = config.gap;
+    let column = 0;
+    let prevCols = [];
+
+    for(let i=0; i<childs.length; i++){
+        const child = childs[i];
+        prevCols.push(child);
+
+        if(top < child.offsetTop) break;
+        if(top == child.offsetTop && left < child.offsetLeft) break;
+
+        if(selectedEle.offsetWidth - (child.offsetLeft + child.offsetWidth + 2 * config.gap) > config.width){
+            left = child.offsetLeft + child.offsetWidth + config.gap;
+        }else{
+            column += 1;
+            top = column * config.height + (1 + column) * config.gap;
+            left = config.gap;
+            for(let j=0; j<prevCols.length; j++){
+                const prevCol = prevCols[j];
+                if(top < prevCol.offsetHeight) left += (prevCol.offsetWidth + config.gap);
+                else break;
+            }
+            // prevcolsの編集
+            prevCols = prevCols.filter((ele) => {
+                return top + config.height < ele.offsetTop + ele.offsetHeight;
+            });
+        }
+    }
+    div.style.top = top + "px";
+    div.style.left = left + "px";
+
+    if((top + config.height + config.gap) <= selectedEle.offsetHeight && (left + config.width + config.gap) <= selectedEle.offsetWidth){
+        selectedEle.append(div);
+    }
 
     updateSelectedEle(config.parentEle);
 }
@@ -214,11 +264,53 @@ function mousedownForDrag(event){
         document.body.removeEventListener("touchmove", mousemoveForDrag, false);
         drag.removeEventListener("toucend", mouseupForDrag, false);
 
-        // 追加で記述
         document.body.removeEventListener("mouseleave", mouseupForDrag, false);
         document.body.removeEventListener("touchleave", mouseupForDrag, false);
 
         drag.classList.remove("drag");
+
+        // ↓子の要素をソート
+        // const parent = drag.parentNode;
+        // const childs = [];
+        // for(const child of parent.querySelectorAll(".box")){
+        //     if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+        // }
+    
+        // childs.sort((a,b) => {
+        //     if(a.offsetTop < b.offsetTop) return -1;
+        //     if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
+        //     return 1;
+        // });
+        // ↑子の要素をソート
+
+        // let top = config.gap;
+        // let left = config.gap;
+        // const prevCols = [];
+
+        // for(let i=0; i<childs.length; i++){
+        //     const child = childs[i];
+        //     if(i == 0){
+        //         child.style.top = `${top}px`;
+        //         child.style.left = `${left}px`;
+        //         left += (child.offsetWidth + config.gap);
+        //         continue;
+        //     }
+        //     if(left + child.offsetWidth + config.gap <= parent.offsetWidth){
+        //         child.style.top = `${top}px`;
+        //         child.style.left = `${left + config.gap}px`;
+        //         left += (child.offsetWidth + config.gap);
+        //     }else{
+        //         for(let j=0; prevCols.length; j++){
+        //             const prevChild = prevCols[j];
+        //             if(prevChild.offsetTop + prevChild.offsetHeight + child.offsetHeight + config.gap * 2 > parent.offsetHeight) continue;
+        //             top = `${prevChild.offsetTop + prevChild.offsetHeight + config.gap}px`;
+        //             left = `${prevChild.offsetLeft}px`;
+
+        //         }
+        //         child.style.top = `${top}px`;
+        //         child.style.left = `${left}px`;
+        //     }
+        // }
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);

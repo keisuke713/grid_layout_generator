@@ -38,8 +38,6 @@ body {
 
 /* div要素に対するスタイル */
 .box{
-    height:200px;
-    width:200px;
     position: absolute;
     z-index: 0;
     border-radius: 20px;
