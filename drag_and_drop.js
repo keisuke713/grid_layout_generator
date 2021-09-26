@@ -79,7 +79,7 @@ function addDivEle(){
         console.log(`top:${top}`);
         console.log(`selectedEle.height:${selectedEle.offsetHeight}`)
         console.log(`left:${left}`);
-        console.log(`width:${selectedEle.offsetWidth}`)
+        console.log(`width:${selectedEle.offsetWidth}`);
     }
 
     updateSelectedEle(config.parentEle);
