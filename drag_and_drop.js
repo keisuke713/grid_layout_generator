@@ -1,9 +1,8 @@
 let selectedEle = config.parentEle;
 updateSelectedEle(selectedEle)
 
-let numberOfBoxes = 0;
+let numberOfBoxes = 1;
 function addDivEle(){
-    numberOfBoxes += 1;
 
     // 新しいdiv要素を作成
     const div = document.createElement("div");
@@ -57,8 +56,11 @@ function addDivEle(){
             left = config.gap;
             for(let j=0; j<prevCols.length; j++){
                 const prevCol = prevCols[j];
-                if(top < prevCol.offsetHeight) left += (prevCol.offsetWidth + config.gap);
-                else break;
+                if(top < prevCol.offsetTop + prevCol.offsetHeight && selectedEle.offsetWidth - (prevCol.offsetLeft + prevCol.offsetWidth + 2 * config.gap) > 0) left += (prevCol.offsetWidth + config.gap);
+                else{
+                    top = prevCol.offsetTop + prevCol.offsetHeight + config.gap;
+                    break;
+                }
             }
             // prevcolsの編集
             prevCols = prevCols.filter((ele) => {
@@ -71,6 +73,13 @@ function addDivEle(){
 
     if((top + config.height + config.gap) <= selectedEle.offsetHeight && (left + config.width + config.gap) <= selectedEle.offsetWidth){
         selectedEle.append(div);
+        numberOfBoxes += 1;
+    }else{
+        console.log("=================");
+        console.log(`top:${top}`);
+        console.log(`selectedEle.height:${selectedEle.offsetHeight}`)
+        console.log(`left:${left}`);
+        console.log(`width:${selectedEle.offsetWidth}`)
     }
 
     updateSelectedEle(config.parentEle);
