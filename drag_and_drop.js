@@ -23,9 +23,8 @@ function addDivEle(){
     div.addEventListener("touchstart", mousedown, false);
     div.addEventListener("click", clickEle,false);
 
-    // ↓子の要素をソート
     const childs = [];
-    for(const child of selectedEle.querySelectorAll(".box")){
+    for(const child of selectedEle.childNodes){
         if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
     }
 
@@ -34,7 +33,6 @@ function addDivEle(){
         if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
         return 1;
     });
-    // ↑子の要素をソート
 
     let top = config.gap;
     let left = config.gap;
@@ -62,7 +60,6 @@ function addDivEle(){
                     break;
                 }
             }
-            // prevcolsの編集
             prevCols = prevCols.filter((ele) => {
                 return top + config.height < ele.offsetTop + ele.offsetHeight;
             });
@@ -80,9 +77,8 @@ function addDivEle(){
         console.log(`selectedEle.height:${selectedEle.offsetHeight}`)
         console.log(`left:${left}`);
         console.log(`width:${selectedEle.offsetWidth}`);
+        alert("スペースがありません。")
     }
-
-    updateSelectedEle(config.parentEle);
 }
 function clickEle(event){
     if(event.shiftKey == false){
@@ -240,3 +236,8 @@ function updateSelectedEle(ele){
     if(config.parentEle === selectedEle) config.selectedEleInfo.innerText = "";
     else config.selectedEleInfo.innerText = selectedEle.getAttribute("id");
 }
+
+config.parentEle.addEventListener("click", event => {
+    if(event.target != config.parentEle) return;
+    updateSelectedEle(event.target);
+})
