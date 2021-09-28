@@ -7,11 +7,24 @@ const node4 = new Node(4, "div", [], "", 3, []);
 const node5 = new Node(5, "div", [], "", 2, []);
 const node6 = new Node(6, "div", [], "", 1, []);
 const node7 = new Node(7, "div", [], "", 2, []);
+const node8 = new Node(8, "div", [], "", 3, []);
+const node9 = new Node(9, "div", [], "", 4, []);
+const node10 = new Node(10, "div", [], "", 5, []);
+const node11 = new Node(11, "div", [], "", 6, []);
+const node12 = new Node(12, "div", [], "", 7, []);
+const node13 = new Node(13, "div", [], "", 8, []);
 
 node2.childNode.push(node3);
 node2.childNode.push(node4);
 node1.childNode.push(node2);
 node1.childNode.push(node5);
+
+node12.childNode.push(node13);
+node11.childNode.push(node12);
+node10.childNode.push(node11);
+node9.childNode.push(node10);
+node8.childNode.push(node9);
+node7.childNode.push(node8);
 node6.childNode.push(node7);
 node0.childNode.push(node1);
 node0.childNode.push(node6);
@@ -30,11 +43,11 @@ node0.style.push(map2);
 
 node7.style.push(map2);
 
-const dom = new DOM(node0, document.getElementById("code"), document.getElementById("code2"));
+const dom = new DOM(node0, document.getElementById("html-code"), document.getElementById("style-code"));
 
-// console.log(dom);
+console.log(dom);
 
-// dom.print();
+dom.print();
 
 
 // ======================= <<消しちゃだめ！！>> htmlとstyleをコピーするイベントリスナー ============================

@@ -61,6 +61,12 @@ body {
     border:3px solid black;
 }
 
+/* コードを表示するdiv */
+.code-block{
+    height:200px;
+    width:250px;
+    overflow: scroll;
+}
 /* コードを表示する場所のpタグはmargiを0にする */
 code p{
     margin:0;
