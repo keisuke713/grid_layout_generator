@@ -1,28 +1,11 @@
 let selectedEle = config.parentEle;
 updateSelectedEle(selectedEle)
 
+alert("toptoleftを決める処理をメソッドに切り分けたい")
 let numberOfBoxes = 1;
 function addDivEle(){
 
-    // 新しいdiv要素を作成
-    const div = document.createElement("div");
-    div.classList.add("box");
-    div.style.height = `${config.height}px`;
-    div.style.width = `${config.width}px`;
-    div.setAttribute("id", `ele${numberOfBoxes}`);
-    div.dataset.id = numberOfBoxes;
-    div.innerText = numberOfBoxes;
-
-    // 親要素の被らないカラーを取得
-    let index = Math.floor(Math.random() * config.elementColors.length);
-    while(selectedEle.style.background == config.elementColors[index]){
-        index = Math.floor(Math.random() * config.elementColors.length);
-    }
-    div.style.background = config.elementColors[index];
-
-    div.addEventListener("mousedown", mousedown, false);
-    div.addEventListener("touchstart", mousedown, false);
-    div.addEventListener("click", clickEle,false);
+    const div = createBox(numberOfBoxes);
 
     const childs = [];
     for(const child of selectedEle.childNodes){
@@ -81,6 +64,32 @@ function addDivEle(){
         alert("スペースがありません。")
     }
 }
+
+function createBox(numberOfBoxes){
+    // style,id設定
+    const div = document.createElement("div");
+    div.classList.add("box");
+    div.style.height = `${config.height}px`;
+    div.style.width  = `${config.width}px`;
+    div.setAttribute("id", `ele${numberOfBoxes}`);
+    div.dataset.id = numberOfBoxes;
+    div.innerText = numberOfBoxes;
+
+    // 色設定
+    let index = Math.floor(Math.random() * config.elementColors.length);
+    while(selectedEle.style.background == config.elementColors[index]){
+        index = Math.floor(Math.random() * config.elementColors.length);
+    }
+    div.style.background = config.elementColors[index];
+
+    // イベント追加
+    div.addEventListener("mousedown", mousedown, false);
+    div.addEventListener("touchstart", mousedown, false);
+    div.addEventListener("click", clickEle, false);
+
+    return div;
+}
+
 function clickEle(event){
     if(event.shiftKey == false){
         updateSelectedEle(config.parentEle);
@@ -244,7 +253,7 @@ config.parentEle.addEventListener("click", event => {
     updateSelectedEle(event.target);
 })
 
+// 現在表示されているブロック要素をコードに変換していく
 function translateHtml(){
     const id = selectedEle.dataset.id;
-    console.log(id);
 }
