@@ -29,19 +29,12 @@ node6.childNode.push(node7);
 node0.childNode.push(node1);
 node0.childNode.push(node6);
 
-const map = new HashMap();
-map.set("property", "display");
-map.set("value", "grid");
+node0.style.push(new Style("display", "grid"));
+node0.style.push(new Style("width", "95", "%"));
 
-const map2 = new HashMap();
-map2.set("property", "width");
-map2.set("value", "95");
-map2.set("unit", "%");
+node7.style.push(new Style("width", "95", "%"));
 
-node0.style.push(map);
-node0.style.push(map2);
-
-node7.style.push(map2);
+// const parentNode = new Node(0, "div", [], 0, []);
 
 const dom = new DOM(node0, document.getElementById("html-code"), document.getElementById("style-code"));
 
