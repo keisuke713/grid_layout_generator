@@ -10,6 +10,7 @@ function addDivEle(){
     div.style.height = `${config.height}px`;
     div.style.width = `${config.width}px`;
     div.setAttribute("id", `ele${numberOfBoxes}`);
+    div.dataset.id = numberOfBoxes;
     div.innerText = numberOfBoxes;
 
     // 親要素の被らないカラーを取得
@@ -175,6 +176,7 @@ function mousedownForDrag(event){
         //         child.style.left = `${left}px`;
         //     }
         // }
+        translateHtml();
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
@@ -241,3 +243,8 @@ config.parentEle.addEventListener("click", event => {
     if(event.target != config.parentEle) return;
     updateSelectedEle(event.target);
 })
+
+function translateHtml(){
+    const id = selectedEle.dataset.id;
+    console.log(id);
+}
