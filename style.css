@@ -13,7 +13,7 @@ body {
     width:100%;
     height:100%;
     display:grid;
-    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
     grid-template-areas: "test test1 test2";
     background:black;
 }
@@ -26,7 +26,7 @@ body {
 .test1{
     grid-area: test1;
     background: white;;
-    height:90%;
+    height:100%;
 }
 
 .test2{

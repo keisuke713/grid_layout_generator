@@ -5,6 +5,7 @@ class Node{
     constructor(id, tag, style, text, depth){
         this.id        = id;
         this.tag       = tag;
+        // hashmapの配列
         this.style     = style;
         this.text      = text;
         this.depth     = depth;
