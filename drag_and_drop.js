@@ -1,10 +1,9 @@
 let selectedEle = config.parentEle;
 updateSelectedEle(selectedEle)
 
-alert("toptoleftを決める処理をメソッドに切り分けたい")
+// 現在の要素数
 let numberOfBoxes = 1;
 function addDivEle(){
-
     const div = createBox(numberOfBoxes);
 
     const childs = [];
