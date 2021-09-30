@@ -22,8 +22,7 @@ function addDivEle(){
     let column = 0;
     let prevCols = [];
 
-    for(let i=0; i<childs.length; i++){
-        const child = childs[i];
+    for(const child of childs){
         prevCols.push(child);
 
         if(top < child.offsetTop) break;
@@ -35,8 +34,7 @@ function addDivEle(){
             column += 1;
             top = column * config.height + (1 + column) * config.gap;
             left = config.gap;
-            for(let j=0; j<prevCols.length; j++){
-                const prevCol = prevCols[j];
+            for(const prevCol of prevCols){
                 if(top < prevCol.offsetTop + prevCol.offsetHeight && selectedEle.offsetWidth - (prevCol.offsetLeft + prevCol.offsetWidth + 2 * config.gap) > 0) left += (prevCol.offsetWidth + config.gap);
                 else{
                     top = prevCol.offsetTop + prevCol.offsetHeight + config.gap;
@@ -143,47 +141,27 @@ function mousedownForDrag(event){
         drag.classList.remove("drag");
 
         // ↓子の要素をソート
-        // const parent = drag.parentNode;
-        // const childs = [];
-        // for(const child of parent.querySelectorAll(".box")){
-        //     if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-        // }
+        const parent = drag.parentNode;
+        const childs = [];
+        for(const child of parent.querySelectorAll(".box")){
+            if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+        }
     
-        // childs.sort((a,b) => {
-        //     if(a.offsetTop < b.offsetTop) return -1;
-        //     if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
-        //     return 1;
-        // });
+        childs.sort((a,b) => {
+            if(a.offsetTop < b.offsetTop) return -1;
+            if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
+            return 1;
+        });
         // ↑子の要素をソート
 
-        // let top = config.gap;
-        // let left = config.gap;
-        // const prevCols = [];
+        let top = config.gap;
+        let left = config.gap;
+        let column = 0;
+        let prevCols = [];
 
-        // for(let i=0; i<childs.length; i++){
-        //     const child = childs[i];
-        //     if(i == 0){
-        //         child.style.top = `${top}px`;
-        //         child.style.left = `${left}px`;
-        //         left += (child.offsetWidth + config.gap);
-        //         continue;
-        //     }
-        //     if(left + child.offsetWidth + config.gap <= parent.offsetWidth){
-        //         child.style.top = `${top}px`;
-        //         child.style.left = `${left + config.gap}px`;
-        //         left += (child.offsetWidth + config.gap);
-        //     }else{
-        //         for(let j=0; prevCols.length; j++){
-        //             const prevChild = prevCols[j];
-        //             if(prevChild.offsetTop + prevChild.offsetHeight + child.offsetHeight + config.gap * 2 > parent.offsetHeight) continue;
-        //             top = `${prevChild.offsetTop + prevChild.offsetHeight + config.gap}px`;
-        //             left = `${prevChild.offsetLeft}px`;
+        for(let i=0; i<childs.length; i++){
 
-        //         }
-        //         child.style.top = `${top}px`;
-        //         child.style.left = `${left}px`;
-        //     }
-        // }
+        }
         translateHtml();
     }
 

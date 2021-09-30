@@ -44,7 +44,7 @@ const parentNode = new Node(0, "div", styles, 0, []);
 
 const dom = new DOM(parentNode, document.getElementById("html-code"), document.getElementById("style-code"));
 
-console.log(dom);
+// console.log(dom);
 
 dom.print();
 
