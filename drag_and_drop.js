@@ -185,50 +185,6 @@ function mousedownForResize(event){
         document.body.removeEventListener("touchleave", mouseupForResize, false);
 
         resize.classList.remove("resize");
-
-        const parent = resize.parentNode;
-
-        // 縦幅の制御
-        if(parent.offsetHeight - (resize.offsetTop + resize.offsetHeight + config.gap) < 0){
-            const height = parent.offsetHeight - (resize.offsetTop + config.gap);
-            resize.style.height = `${height}px`;
-        }
-        // 横幅の制御
-        if(parent.offsetWidth - (resize.offsetLeft + resize.offsetWidth + config.gap) < 0){
-            const width = parent.offsetWidth - (resize.offsetLeft + config.gap);
-            resize.style.width = `${width}px`;
-        }
-
-        // const childs = [];
-        // for(const child of parent.querySelectorAll(".box")){
-        //     if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-        // }
-    
-        // childs.sort((a,b) => {
-        //     if(a.offsetTop < b.offsetTop) return -1;
-        //     if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
-        //     return 1;
-        // });
-
-        // let height = config.gap;
-        // let width = config.gap;
-        // let column = 0;
-        // let prevChild = null;
-        // let prevCols = [];
-
-        // for(let i=0; i<childs.length; i++){
-        //     const child = childs[i];
-        //     // 縦幅の制御
-        //     if(parent.offsetHeight - (child.offsetTop + child.offsetHeight + config.gap) < 0){
-        //         const height = parent.offsetHeight - (child.offsetTop + config.gap);
-        //         child.style.height = `${height}px`;
-        //     }
-        //     // 横幅の制御
-        //     if(parent.offsetWidth - (child.offsetLeft + child.offsetWidth + config.gap) < 0){
-        //         const width = parent.offsetWidth - (child.offsetLeft + config.gap);
-        //         child.style.width = `${width}px`;
-        //     }
-        // }
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
