@@ -105,7 +105,11 @@ function mousedown(event){
 
 function mousedownForDrag(event){
     event.stopPropagation();
+
     const ele = event.target;
+    const originalTop = ele.offsetTop;
+    const originalLeft = ele.offsetLeft;
+
     ele.classList.add("drag");
 
     if(event.type !== "mousedown") event = event.changedTouches[0];
@@ -139,7 +143,22 @@ function mousedownForDrag(event){
         document.body.removeEventListener("touchleave", mouseupForDrag, false);
 
         drag.classList.remove("drag");
-        translateHtml();
+
+        const parent = drag.parentNode;
+        if(drag.offsetTop < config.gap || drag.offsetLeft < config.gap){
+            drag.style.top = `${originalTop}px`;
+            drag.style.left = `${originalLeft}px`;
+        }
+        
+        if(parent.offsetHeight - (drag.offsetTop + drag.offsetHeight + config.gap) < 0){
+            drag.style.top = `${originalTop}px`;
+            drag.style.left = `${originalLeft}px`;
+        }
+
+        if(parent.offsetWidth - (drag.offsetLeft + drag.offsetWidth + config.gap) < 0){
+            drag.style.top = `${originalTop}px`;
+            drag.style.left = `${originalLeft}px`;
+        }
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
