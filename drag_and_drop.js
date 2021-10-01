@@ -152,6 +152,8 @@ function mousedownForResize(event){
     event.stopPropagation();
 
     const ele = event.target;
+    const originalHeight = ele.offsetHeight;
+    const originalWidth  = ele.offsetWidth;
     ele.classList.add("resize");
 
     if(event.type !== "mousedown") event = event.changedTouches[0];
@@ -185,6 +187,59 @@ function mousedownForResize(event){
         document.body.removeEventListener("touchleave", mouseupForResize, false);
 
         resize.classList.remove("resize");
+
+        const parent = resize.parentNode;
+
+        const childs = [];
+        for(const child of parent.querySelectorAll(".box")){
+            if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+        }
+    
+        childs.sort((a,b) => {
+            if(a.offsetTop < b.offsetTop) return -1;
+            if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
+            return 1;
+        });
+
+        // リサイズした要素と横幅がかぶっている要素
+        const rightEles = [];
+        // リサイズした要素と縦幅がかぶっている要素
+        const bottomEles = [];
+        // リサイズした要素と縦横幅両方かぶっている要素
+        const bottomRightEles = [];
+
+        for(const child of childs){
+            if(resize == child) continue;
+            if(resize.offsetTop > child.offsetTop + child.offsetHeight) continue;
+            if(resize.offsetLeft > child.offsetLeft + child.offsetWidth) continue;
+
+            if(resize.offsetTop == child.offsetTop && resize.offsetLeft < child.offsetLeft && (resize.offsetLeft + resize.offsetWidth) >= child.offsetLeft) rightEles.push(child);
+            if(resize.offsetLeft == child.offsetLeft && resize.offsetTop < child.offsetTop && (resize.offsetTop + resize.offsetHeight) >= child.offsetTop) bottomEles.push(child);
+            if((resize.offsetLeft + resize.offsetWidth) >= child.offsetLeft && 
+            (resize.offsetTop + resize.offsetHeight) >= child.offsetTop && 
+            !rightEles.includes(child) &&
+            !bottomEles.includes(child)) bottomRightEles.push(child);
+        }
+
+        if(bottomRightEles.length > 0){
+            resize.style.width = `${originalWidth}px`;
+            resize.style.height = `${originalHeight}px`;
+        }else if(rightEles.length > 0){
+            resize.style.width = `${originalWidth}px`;
+        }else if(bottomEles.length > 0){
+            resize.style.height = `${originalHeight}px`;
+        }
+
+        // 縦幅の制御
+        if(parent.offsetHeight - (resize.offsetTop + resize.offsetHeight + config.gap) < 0){
+            const height = parent.offsetHeight - (resize.offsetTop + config.gap);
+            resize.style.height = `${height}px`;
+        }
+        // 横幅の制御
+        if(parent.offsetWidth - (resize.offsetLeft + resize.offsetWidth + config.gap) < 0){
+            const width = parent.offsetWidth - (resize.offsetLeft + config.gap);
+            resize.style.width = `${width}px`;
+        }
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
