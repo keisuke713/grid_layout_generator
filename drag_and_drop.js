@@ -172,6 +172,7 @@ function mousedownForDrag(event){
         });
 
         for(const child of childs){
+            if(drag == child) continue;
             if(overlapAnotherEle(drag, child)){
                 drag.style.top = `${originalTop}px`;
                 drag.style.left = `${originalLeft}px`;
@@ -296,11 +297,19 @@ function updateSelectedEle(ele){
 }
 
 function overlapAnotherEle(ele1, ele2){
-    if((ele2.offsetLeft + ele2.offsetWidth + config.gap) < ele1.offsetLeft && (ele2.offsetTop + ele2.offsetHeight + config.gap) > ele1.offsetTop) return true;
-    if((ele1.offsetLeft + ele1.offsetWidth + config.gap) > ele2.offsetLeft && (ele2.offsetTop + ele2.offsetHeight + config.gap) > ele1.offsetTop) return true;
-    if((ele2.offsetLeft + ele2.offsetWidth + config.gap) > ele1.offsetLeft && (ele1.offsetTop + ele1.offsetHeight + config.gap) > ele2.offsetTop) return true;
-    if((ele1.offsetLeft + ele1.offsetWidth + config.gap) < ele2.offsetLeft && (ele1.offsetTop + ele1.offsetHeight + config.gap) > ele2.offsetTop) return true;
-    return false;
+    // console.log(ele1);
+    // console.log(ele2);
+    // if((ele2.offsetLeft + ele2.offsetWidth + config.gap) < ele1.offsetLeft && (ele2.offsetTop + ele2.offsetHeight + config.gap) > ele1.offsetTop) return true;
+    // if((ele1.offsetLeft + ele1.offsetWidth + config.gap) > ele2.offsetLeft && (ele2.offsetTop + ele2.offsetHeight + config.gap) > ele1.offsetTop) return true;
+    // if((ele2.offsetLeft + ele2.offsetWidth + config.gap) > ele1.offsetLeft && (ele1.offsetTop + ele1.offsetHeight + config.gap) > ele2.offsetTop) return true;
+    // if((ele1.offsetLeft + ele1.offsetWidth + config.gap) < ele2.offsetLeft && (ele1.offsetTop + ele1.offsetHeight + config.gap) > ele2.offsetTop) return true;
+    // return false;
+
+    return !(((ele2.offsetTop + ele2.offsetHeight + config.gap) < ele1.offsetTop) || 
+                ((ele2.offsetLeft + ele2.offsetWidth + config.gap) < ele1.offsetLeft) || 
+                ((ele1.offsetTop + ele1.offsetHeight + config.gap) < ele2.offsetTop) || 
+                ((ele1.offsetLeft + ele1.offsetWidth + config.gap) < ele2.offsetLeft)
+            );
 }
 
 config.parentEle.addEventListener("click", event => {
