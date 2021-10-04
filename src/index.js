@@ -51,19 +51,19 @@ dom.print();
 
 // ======================= <<消しちゃだめ！！>> htmlとstyleをコピーするイベントリスナー ============================
 
-// let str = document.getElementById("code").innerText;
-// str = str.replace("\n", "").replace(/\n\n/g, "\n");
+let str = document.getElementById("html-code").innerText;
+str = str.replace("\n", "").replace(/\n\n/g, "\n");
 
-// document.getElementById("copy").addEventListener("click", () => {
-//     navigator.clipboard.writeText(str);
-// })
+document.getElementById("copy").addEventListener("click", () => {
+    navigator.clipboard.writeText(str);
+})
 
-// let str2 = document.getElementById("code2").innerText;
-// str2 = str2.replace("\n", "").replace(/\n\n/g, "\n");
+let str2 = document.getElementById("style-code").innerText;
+str2 = str2.replace("\n", "").replace(/\n\n/g, "\n");
 
-// document.getElementById("copy2").addEventListener("click", () => {
-//     navigator.clipboard.writeText(str2);
-// })
+document.getElementById("copy2").addEventListener("click", () => {
+    navigator.clipboard.writeText(str2);
+})
 
 // ============================================== <<消しちゃだめ！！>> ドラッグアンドドロップ ==============================================
 

@@ -13,18 +13,18 @@ class Node{
     }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
-        tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag}${this.id}>`
+        tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id=div${this.id}>`
         if(this.text.length > 0) tag.innerText += `${Node.newLine}${Node.space.repeat(this.depth + 1)}${this.text}`
         return tag;
     }
     createLastHtmlTag(){
         const tag = document.createElement("p");
-        tag.innerText =`${Node.space.repeat(this.depth)}</${this.tag}${this.id}>`
+        tag.innerText =`${Node.space.repeat(this.depth)}</${this.tag}>`
         return tag;
     }
     createFirstStyleTag(){
         const tag = document.createElement("p");
-        tag.innerText = `#${this.id}{`;
+        tag.innerText = `#div${this.id}{`;
         return tag;
     }
     createStyleBodies(){

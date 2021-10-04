@@ -60,6 +60,7 @@ function addDivEle(){
         console.log(`width:${selectedEle.offsetWidth}`);
         alert("スペースがありません。")
     }
+    translateHtml();
 }
 
 function createBox(numberOfBoxes){
@@ -145,10 +146,10 @@ function mousedownForDrag(event){
         drag.classList.remove("drag");
 
         const parent = drag.parentNode;
-        if(drag.offsetTop < config.gap || drag.offsetLeft < config.gap){
-            drag.style.top = `${originalTop}px`;
-            drag.style.left = `${originalLeft}px`;
-        }
+        // if(drag.offsetTop < config.gap || drag.offsetLeft < config.gap){
+        //     drag.style.top = `${originalTop}px`;
+        //     drag.style.left = `${originalLeft}px`;
+        // }
 
         if(parent.offsetHeight - (drag.offsetTop + drag.offsetHeight + config.gap) < 0){
             drag.style.top = `${originalTop}px`;
@@ -180,6 +181,7 @@ function mousedownForDrag(event){
         //         break;
         //     }
         // }
+        translateHtml();
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
@@ -280,6 +282,8 @@ function mousedownForResize(event){
             const width = parent.offsetWidth - (resize.offsetLeft + config.gap);
             resize.style.width = `${width}px`;
         }
+
+        translateHtml();
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -320,5 +324,8 @@ config.parentEle.addEventListener("click", event => {
 
 // 現在表示されているブロック要素をコードに変換していく
 function translateHtml(){
-    const id = selectedEle.dataset.id;
+    console.log("変換開始");
+    const parent = config.parentEle;
+    console.log(parent);
+    console.log("変換終了");
 }
