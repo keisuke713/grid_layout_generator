@@ -171,14 +171,15 @@ function mousedownForDrag(event){
             return 1;
         });
 
-        for(const child of childs){
-            if(drag == child) continue;
-            if(overlapAnotherEle(drag, child)){
-                drag.style.top = `${originalTop}px`;
-                drag.style.left = `${originalLeft}px`;
-                break;
-            }
-        }
+        // dragの細かい動きはまだ決まっていないからコメントアウト
+        // for(const child of childs){
+        //     if(drag == child) continue;
+        //     if(overlapAnotherEle(drag, child)){
+        //         drag.style.top = `${originalTop}px`;
+        //         drag.style.left = `${originalLeft}px`;
+        //         break;
+        //     }
+        // }
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
