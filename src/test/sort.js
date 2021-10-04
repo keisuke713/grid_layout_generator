@@ -18,19 +18,19 @@ function createEle(top, left, id){
 }
 
 // 横一列だけど微妙に高さがズレてる
-selectedEle.append(createEle(config.gap*2+5 + config.height, config.gap*2 + config.width, 5));
-selectedEle.append(createEle(config.gap*2 + config.height, config.gap, 4));
-selectedEle.append(createEle(config.gap-5, config.gap*3 + config.width*2, 3));
-selectedEle.append(createEle(config.gap+5, config.gap*2 + config.width, 2));
-selectedEle.append(createEle(config.gap,10,1));
+// selectedEle.append(createEle(config.gap*2+5 + config.height, config.gap*2 + config.width, 5));
+// selectedEle.append(createEle(config.gap*2 + config.height, config.gap, 4));
+// selectedEle.append(createEle(config.gap-5, config.gap*3 + config.width*2, 3));
+// selectedEle.append(createEle(config.gap+5, config.gap*2 + config.width, 2));
+// selectedEle.append(createEle(config.gap,10,1));
 
-let childs = [];
-for(const child of selectedEle.childNodes){
-    if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-}
-console.log("before sorting");
-console.log(childs);
+// let childs = [];
+// for(const child of selectedEle.childNodes){
+//     if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+// }
+// console.log("before sorting");
+// console.log(childs);
 
-childs = ElementList.sort(childs);
-console.log("after sorting");
-childs.forEach(ele => console.log(ele));
+// childs = ElementList.sort(childs);
+// console.log("after sorting");
+// childs.forEach(ele => console.log(ele));
