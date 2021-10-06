@@ -60,7 +60,7 @@ function addDivEle(){
         console.log(`width:${selectedEle.offsetWidth}`);
         alert("スペースがありません。")
     }
-    translateHtml();
+    addElementToDom(selectedEle);
 }
 
 function createBox(numberOfBoxes){
@@ -181,7 +181,7 @@ function mousedownForDrag(event){
         //         break;
         //     }
         // }
-        translateHtml();
+        // translateHtml();
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
@@ -283,7 +283,7 @@ function mousedownForResize(event){
             resize.style.width = `${width}px`;
         }
 
-        translateHtml();
+        // translateHtml();
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -323,9 +323,74 @@ config.parentEle.addEventListener("click", event => {
 })
 
 // 現在表示されているブロック要素をコードに変換していく
+// addElementToDomとeditDomに分けるからいらないかも
 function translateHtml(){
+    console.clear();
     console.log("変換開始");
-    const parent = config.parentEle;
-    console.log(parent);
+    // translateHtmlHelper(config.parentEle);
+    const queue = [];
+    queue.push(config.parentEle);
+    while(queue.length > 0){
+        const ele = queue.shift();        
+        console.log(ele);
+        // 対応するdomを取得
+        const node = dom.findById(Number(ele.dataset.id));
+        console.log(node);
+
+        if(dom.findById(Number(ele.dataset.id))) node = dom.findById(Number(ele.dataset.id));
+        else{
+            // 親がわからない問題
+            // dom.appnedNode()
+        }
+
+        const childs = [];
+        for(const child of ele.childNodes){
+            if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+        }
+
+        // domに追加する処理
+        for(const child of childs){}
+
+        // キューに追加
+        for(const child of childs){
+            if(child.nodeType != 1 || !child.classList.contains("box")) continue;
+            queue.push(child);
+        }
+    }
     console.log("変換終了");
 }
+
+function addElementToDom(parent){
+    console.clear();
+    console.log("addElementToDom:start");
+    console.log(`parent id is${parent.dataset.id}`);
+    const parentNode = dom.findById(Number(parent.dataset.id));
+    if(parentNode == null){
+        console.log("parentNode not found");
+        return;
+    }
+
+    // textなどを削除
+    const childs = [];
+    for(const child of parent.childNodes){
+        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+    }
+
+    // domにnodeの追加
+    for(const child of childs){
+        if(parentNode.existChildById(Number(child.dataset.id))) continue;
+        const newNode = new Node(Number(child.dataset.id), "div", [], "", null);
+        dom.appnedNode(Number(parentNode.id), newNode);
+        break;
+    }
+    console.log("update dom");
+    console.log(dom);
+
+    console.log("addElementToDom:end");
+}
+function editDom(){}
+function parseDom(){
+}
+
+console.log("要素の追加とリサイズ・ドラッグでメソッドを分ける？");
+console.log("リサイズとドラッグの時は選択されている要素の親要素に対してだけ処理する")

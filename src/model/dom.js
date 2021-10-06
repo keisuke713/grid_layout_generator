@@ -4,6 +4,55 @@ class DOM{
         this.htmlParentNode = htmlParentNode;
         this.styleParentNode  = styleParentNode;
     }
+    findById(id){
+        const queue = [];
+        queue.push(this.head);
+
+        while(queue.length > 0){
+            const ele = queue.shift();
+            console.log(ele);
+            if(ele.id == id) return ele;
+
+            for(const child of ele.childNode){
+                // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+                queue.push(child);
+            }
+        }
+        return null;
+    }
+    exist(id){
+        const queue = [];
+        queue.push(this.head);
+
+        while(queue.length > 0){
+            const ele = queue.shift();
+            if(ele.id == id) return true;
+
+            for(const child of ele.childNode){
+                // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+                queue.push(child);
+            }
+        }
+        return false;
+    }
+    appnedNode(parentId, childNode){
+        const queue = [];
+        queue.push(this.head);
+
+        while(queue.length > 0){
+            const ele = queue.shift();
+            if(ele.id == parentId){
+                ele.childNode.push(childNode);
+                return;
+            }
+
+            for(const child of ele.childNode){
+                // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+                queue.push(child);
+            }
+        }
+        return;
+    }
     print(){
         this.printHelper(this.head);
     }

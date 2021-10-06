@@ -11,6 +11,12 @@ class Node{
         this.depth     = depth;
         this.childNode = [];
     }
+    existChildById(id){
+        for(const node of this.childNode){
+            if(node.id == id) return true;
+        }
+        return false;
+    }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
         tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id=div${this.id}>`
