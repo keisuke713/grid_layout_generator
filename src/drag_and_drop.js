@@ -6,13 +6,7 @@ let numberOfBoxes = 1;
 function addDivEle(){
     const div = createBox(numberOfBoxes);
 
-    const childs = getChild(selectedEle);
-
-    childs.sort((a,b) => {
-        if(a.offsetTop < b.offsetTop) return -1;
-        if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
-        return 1;
-    });
+    const childs = sortList(getChild(selectedEle), compareNodeFlexibility);
 
     let top = config.gap;
     let left = config.gap;
@@ -57,8 +51,8 @@ function addDivEle(){
         console.log(`width:${selectedEle.offsetWidth}`);
         alert("スペースがありません。")
     }
-    addElementToDom(selectedEle);
-    parseDom(selectedEle);
+    // addElementToDom(selectedEle);
+    // parseDom(selectedEle);
 }
 
 function createBox(numberOfBoxes){
@@ -344,13 +338,7 @@ function parseDom(parent){
     console.clear();
     console.log("parseDom:start");
 
-    const childs = getChild(parent);
-
-    childs.sort((a,b) => {
-        if(a.offsetTop < b.offsetTop) return -1
-        if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
-        return 1;
-    });
+    const childs = sortList(getChild(selectedEle), compareNodeFlexibility);
 
     let prevCols = [];
     let columns = [];

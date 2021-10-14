@@ -1,14 +1,18 @@
-class ElementList{
-    static sort(list){
-        return list.sort((a,b) => {
-            // if(a.offsetTop < b.offsetTop) return -1;
-            // if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
-            // return 1;
+function sortList(list, func){
+    return list.sort((a,b) => {
+        return func(a,b)
+    })
+}
 
-            // offsetTop上下10pxの誤差は同じ行として見なす
-            if((b.offsetTop - a.offsetTop) > 10) return -1;
-            if(Math.abs(a.offsetTop - b.offsetTop) <= 10 && a.offsetLeft < b.offsetLeft) return -1;
-            return 1;
-        });
-    }
+function compareNodeStrictly(ele1, ele2){
+    if(ele1.offsetTop < ele2.offsetTop) return -1;
+    if(ele1.offsetTop == ele2.offsetTop && ele1.offsetLeft < ele2.offsetLeft) return -1;
+    return 1;
+}
+
+function compareNodeFlexibility(ele1, ele2){
+    const diff = config.width * 0.4;
+    if((ele2.offsetTop - ele1.offsetTop) > diff && ele1.offsetTop < ele2.offsetTop) return -1;
+    if(Math.abs(ele1.offsetTop - ele2.offsetTop) <= diff && ele1.offsetLeft < ele2.offsetLeft) return -1;
+    return 1;
 }
