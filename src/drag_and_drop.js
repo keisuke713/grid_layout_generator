@@ -6,10 +6,7 @@ let numberOfBoxes = 1;
 function addDivEle(){
     const div = createBox(numberOfBoxes);
 
-    const childs = [];
-    for(const child of selectedEle.childNodes){
-        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-    }
+    const childs = getChild(selectedEle);
 
     childs.sort((a,b) => {
         if(a.offsetTop < b.offsetTop) return -1;
@@ -325,11 +322,7 @@ function addElementToDom(parent){
         return;
     }
 
-    // textなどを削除
-    const childs = [];
-    for(const child of parent.childNodes){
-        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-    }
+    const childs = getChild(parent);
 
     // domにnodeの追加
     for(const child of childs){
@@ -351,10 +344,7 @@ function parseDom(parent){
     console.clear();
     console.log("parseDom:start");
 
-    const childs = [];
-    for(const child of parent.childNodes){
-        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-    }
+    const childs = getChild(parent);
 
     childs.sort((a,b) => {
         if(a.offsetTop < b.offsetTop) return -1
@@ -477,5 +467,14 @@ function matchRatio(columns, ratio, childsHash, width){
     }
     return false;
 }
+
+function getChild(parent){
+    const childs = [];
+    for(const child of parent.childNodes){
+        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+    }
+    return childs;
+}
+
 　
 // alert("parsedomをもう少しきれいにしたい。childsの取得を共通化したい");
