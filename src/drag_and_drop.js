@@ -16,7 +16,7 @@ function addDivEle(){
     for(const child of childs){
         prevCols.push(child);
 
-        if(top < child.offsetTop) break;
+        if(top < (child.offsetTop + child.originalHeight)) break;
         if(top == child.offsetTop && (left + config.gap*2 + config.width) < child.offsetLeft) break;
 
         if(selectedEle.offsetWidth - (child.offsetLeft + child.offsetWidth + 2 * config.gap) > config.width){
@@ -465,4 +465,4 @@ function getChild(parent){
 }
 
 　
-// alert("parsedomをもう少しきれいにしたい。childsの取得を共通化したい");
+alert("issue紙に書いた");
