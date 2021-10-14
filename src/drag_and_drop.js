@@ -26,7 +26,7 @@ function addDivEle(){
         prevCols.push(child);
 
         if(top < child.offsetTop) break;
-        if(top == child.offsetTop && left < child.offsetLeft) break;
+        if(top == child.offsetTop && (left + config.gap*2 + config.width) < child.offsetLeft) break;
 
         if(selectedEle.offsetWidth - (child.offsetLeft + child.offsetWidth + 2 * config.gap) > config.width){
             left = child.offsetLeft + child.offsetWidth + config.gap;
@@ -61,6 +61,7 @@ function addDivEle(){
         alert("スペースがありません。")
     }
     addElementToDom(selectedEle);
+    parseDom(selectedEle);
 }
 
 function createBox(numberOfBoxes){
@@ -181,7 +182,7 @@ function mousedownForDrag(event){
         //         break;
         //     }
         // }
-        // translateHtml();
+        // parseDom();
     }
 
     ele.addEventListener("mouseup", mouseupForDrag, false);
@@ -283,7 +284,7 @@ function mousedownForResize(event){
             resize.style.width = `${width}px`;
         }
 
-        // translateHtml();
+        // parseDom();
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -302,14 +303,6 @@ function updateSelectedEle(ele){
 }
 
 function overlapAnotherEle(ele1, ele2){
-    // console.log(ele1);
-    // console.log(ele2);
-    // if((ele2.offsetLeft + ele2.offsetWidth + config.gap) < ele1.offsetLeft && (ele2.offsetTop + ele2.offsetHeight + config.gap) > ele1.offsetTop) return true;
-    // if((ele1.offsetLeft + ele1.offsetWidth + config.gap) > ele2.offsetLeft && (ele2.offsetTop + ele2.offsetHeight + config.gap) > ele1.offsetTop) return true;
-    // if((ele2.offsetLeft + ele2.offsetWidth + config.gap) > ele1.offsetLeft && (ele1.offsetTop + ele1.offsetHeight + config.gap) > ele2.offsetTop) return true;
-    // if((ele1.offsetLeft + ele1.offsetWidth + config.gap) < ele2.offsetLeft && (ele1.offsetTop + ele1.offsetHeight + config.gap) > ele2.offsetTop) return true;
-    // return false;
-
     return !(((ele2.offsetTop + ele2.offsetHeight + config.gap) < ele1.offsetTop) || 
                 ((ele2.offsetLeft + ele2.offsetWidth + config.gap) < ele1.offsetLeft) || 
                 ((ele1.offsetTop + ele1.offsetHeight + config.gap) < ele2.offsetTop) || 
@@ -321,44 +314,6 @@ config.parentEle.addEventListener("click", event => {
     if(event.target != config.parentEle) return;
     updateSelectedEle(event.target);
 })
-
-// 現在表示されているブロック要素をコードに変換していく
-// addElementToDomとeditDomに分けるからいらないかも
-function translateHtml(){
-    console.clear();
-    console.log("変換開始");
-    // translateHtmlHelper(config.parentEle);
-    const queue = [];
-    queue.push(config.parentEle);
-    while(queue.length > 0){
-        const ele = queue.shift();        
-        console.log(ele);
-        // 対応するdomを取得
-        const node = dom.findById(Number(ele.dataset.id));
-        console.log(node);
-
-        if(dom.findById(Number(ele.dataset.id))) node = dom.findById(Number(ele.dataset.id));
-        else{
-            // 親がわからない問題
-            // dom.appnedNode()
-        }
-
-        const childs = [];
-        for(const child of ele.childNodes){
-            if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
-        }
-
-        // domに追加する処理
-        for(const child of childs){}
-
-        // キューに追加
-        for(const child of childs){
-            if(child.nodeType != 1 || !child.classList.contains("box")) continue;
-            queue.push(child);
-        }
-    }
-    console.log("変換終了");
-}
 
 function addElementToDom(parent){
     console.clear();
@@ -389,8 +344,138 @@ function addElementToDom(parent){
     console.log("addElementToDom:end");
 }
 function editDom(){}
-function parseDom(){
+
+// 現在表示されているブロック要素をコードに変換していく
+// 現在選択されているノードとその子要素だけ見れば大丈夫そ？
+function parseDom(parent){
+    console.clear();
+    console.log("parseDom:start");
+
+    const childs = [];
+    for(const child of parent.childNodes){
+        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+    }
+
+    childs.sort((a,b) => {
+        if(a.offsetTop < b.offsetTop) return -1
+        if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
+        return 1;
+    });
+
+    let prevCols = [];
+    let columns = [];
+    const grid = [];
+
+    for(let i=0; i<childs.length; i++){
+        const child = childs[i];
+
+        prevCols.push(child);
+        columns.push(Number(child.dataset.id));
+
+        // 行が変わるもしくは最後の要素
+        if(childs[i+1] != null && (childs[i+1].offsetTop - child.offsetTop) <= 10) continue;
+        grid.push(columns);
+        if(childs[i+1] != null){
+            columns = [];
+
+            for(let j=0; j<prevCols.length; j++){
+                const prevCol = prevCols[j];
+                if((prevCol.offsetTop + prevCol.offsetHeight) > childs[i+1].offsetTop){
+                    columns.splice(j, 0, Number(prevCol.dataset.id));
+                }
+            }
+            prevCols = prevCols.filter(ele => {
+                return (ele.offsetTop + ele.offsetHeight) > childs[i+1].offsetTop;
+            })
+        }
+    }
+    // 横に伸びる要素があった場合の対処
+    // 基準とする横幅を算定(一番小さい要素の幅とする)
+    let starndardWidth = selectedEle.offsetWidth;
+    for(let i=0; i<childs.length-1; i++){
+        const child = childs[i];
+        starndardWidth = Math.min(starndardWidth, child.offsetWidth);
+    }
+    // 要素の幅の基準については現在存在する要素のなかで一番小さい幅を採用
+    const maxColumns = Math.floor(selectedEle.offsetWidth / starndardWidth);
+    const patternCache = new HashMap();
+    const childsHash = new HashMap();
+    for(const child of childs){
+        childsHash.set(Number(child.dataset.id), child.offsetWidth);
+    }
+    const newGrid = grid.map(columns => {
+        if(columns.length == maxColumns) return columns;
+
+        // このラムダの中の最終的な戻り値
+        const newColumns = [];
+
+        let patterns;
+        if(patternCache.has(columns.length)) patterns = patternCache.get(columns.length);
+        else{
+            patterns = getPatterns(maxColumns, columns.length - 1);
+            patternCache.set(columns.length, patterns);
+        }
+
+        for(const pattern of patterns){
+            const widthRatio = getRatio(pattern);
+
+            if(matchRatio(columns, widthRatio, childsHash, starndardWidth)){
+                for(let i=0; i<columns.length; i++){
+                    let count = widthRatio[i];
+                    while(0 < count){
+                        newColumns.push(columns[i]);
+                        count--;
+                    }
+                }
+                break;
+            }
+        }
+
+        return newColumns;
+    });
+    console.log(newGrid);
+    console.log("parseDom:end");
 }
 
-console.log("要素の追加とリサイズ・ドラッグでメソッドを分ける？");
-console.log("リサイズとドラッグの時は選択されている要素の親要素に対してだけ処理する")
+function getPatterns(amountOfCell, amountOfPartition){
+    const result = []
+    getPatternsHelper(amountOfCell, amountOfPartition, 0, []);
+
+    function getPatternsHelper(amountOfCell, amountOfPartition, startIndex, patterns){
+        if(amountOfPartition < 1){
+            patterns.push(amountOfCell-1);
+            result.push(patterns);
+            return;
+        }
+        for(let i=startIndex; i<amountOfCell-1; i++){
+            const patternCopy = JSON.parse(JSON.stringify(patterns));
+            patternCopy.push(i);
+            getPatternsHelper(amountOfCell, amountOfPartition-1, i+1, patternCopy);
+        }
+    }
+    return result;
+}
+
+function getRatio(pattern){
+    const ratio = [];
+    let lastPartition = -1;
+
+    for(const partition of pattern){
+        ratio.push(partition - lastPartition);
+        lastPartition = partition;
+    }
+
+    return ratio;
+}
+
+function matchRatio(columns, ratio, childsHash, width){
+    for(let i=0; i<columns.length; i++){
+        const childNodeWidth = childsHash.get(columns[i]);
+        if(childNodeWidth == null) break;
+        if(!(Math.abs(childNodeWidth - width * ratio[i]) < Math.abs(childNodeWidth - width * (ratio[i] - 1)) && Math.abs(childNodeWidth - width * ratio[i]) < Math.abs(childNodeWidth - width * (ratio[i] + 1)))) break;
+        if(i == columns.length - 1) return true;
+    }
+    return false;
+}
+　
+// alert("parsedomをもう少しきれいにしたい。childsの取得を共通化したい");

@@ -47,7 +47,6 @@ class DOM{
             }
 
             for(const child of ele.childNode){
-                // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
                 queue.push(child);
             }
         }
