@@ -9,13 +9,28 @@ class Node{
         this.style     = style;
         this.text      = text;
         this.depth     = depth;
-        this.childNode = [];
+        this.children = [];
     }
     existChildById(id){
-        for(const node of this.childNode){
+        for(const node of this.children){
             if(node.id == id) return true;
         }
         return false;
+    }
+    getChildById(id){
+        for(const node of this.children){
+            if(node.id == id) return node;
+        }
+        return null;
+    }
+    hasChildren(){
+        return this.children.length > 0;
+    }
+    addChild(child){
+        this.children.push(child);
+    }
+    addStyle(style){
+        this.style.push(style);
     }
     createFirstHtmlTag(){
         const tag = document.createElement("p");

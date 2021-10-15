@@ -13,7 +13,7 @@ class DOM{
             console.log(ele);
             if(ele.id == id) return ele;
 
-            for(const child of ele.childNode){
+            for(const child of ele.children){
                 // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
                 queue.push(child);
             }
@@ -28,8 +28,7 @@ class DOM{
             const ele = queue.shift();
             if(ele.id == id) return true;
 
-            for(const child of ele.childNode){
-                // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+            for(const child of ele.children){
                 queue.push(child);
             }
         }
@@ -42,16 +41,24 @@ class DOM{
         while(queue.length > 0){
             const ele = queue.shift();
             if(ele.id == parentId){
-                ele.childNode.push(childNode);
+                ele.addChild(childNode);
                 return;
             }
 
-            for(const child of ele.childNode){
+            for(const child of ele.children){
                 queue.push(child);
             }
         }
         return;
     }
+    // updateNode(parentId, dimensionList){
+    //     if(this.exist(parentId) == null) return;
+    //     const node = this.findById(parentId);
+    //     if(!node.hasChildren() && dimensionList.length > 0){
+    //         node.addStyle(new Style("display", "grid", ""));
+    //         node.addStyle(new Style())
+    //     }
+    // }
     print(){
         this.printHelper(this.head);
     }
@@ -64,7 +71,7 @@ class DOM{
         }
         this.styleParentNode.append(currNode.createLastStyleTag());
     
-        currNode.childNode.forEach(node => {
+        currNode.children.forEach(node => {
             this.printHelper(node);
         });
 

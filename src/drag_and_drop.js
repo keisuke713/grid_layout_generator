@@ -51,8 +51,8 @@ function addDivEle(){
         console.log(`width:${selectedEle.offsetWidth}`);
         alert("スペースがありません。")
     }
-    // addElementToDom(selectedEle);
-    // parseDom(selectedEle);
+    addElementToDom(selectedEle);
+    parseDom(selectedEle);
 }
 
 function createBox(numberOfBoxes){
@@ -275,7 +275,7 @@ function mousedownForResize(event){
             resize.style.width = `${width}px`;
         }
 
-        // parseDom();
+        parseDom(selectedEle);
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -412,6 +412,7 @@ function parseDom(parent){
         return newColumns;
     });
     console.log(newGrid);
+    // dom.updateNode(Number(selectedEle.dataset.id), newGrid);
     console.log("parseDom:end");
 }
 
@@ -465,4 +466,4 @@ function getChild(parent){
 }
 
 　
-alert("issue紙に書いた");
+alert("cssの使うプロパティ洗い出して全部Styleクラスのサブクラスに数r");
