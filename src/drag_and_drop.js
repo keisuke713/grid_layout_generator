@@ -464,6 +464,3 @@ function getChild(parent){
     }
     return childs;
 }
-
-　
-alert("cssの使うプロパティ洗い出して全部Styleクラスのサブクラスに数r");
