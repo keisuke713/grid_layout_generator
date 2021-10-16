@@ -40,7 +40,10 @@ const styles = [
     new Display("grid", "")
 ]
 
-const parentNode = new Node(0, "div", styles, "", 0);
+const parentNode = new Node(0, "div", "", 0);
+parentNode.addStyle(new Width("100", "%"));
+parentNode.addStyle(new Height("100", "%"));
+parentNode.addStyle(new Display("grid", ""));
 
 const dom = new DOM(parentNode, document.getElementById("html-code"), document.getElementById("style-code"));
 

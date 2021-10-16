@@ -51,12 +51,29 @@ class DOM{
         return;
     }
     updateNode(parentId, dimensionList){
-        if(this.exist(parentId) == null) return;
-        const node = this.findById(parentId);
-        if(!node.hasChildren() && dimensionList.length > 0){
-            node.addStyle(new Style("display", "grid", ""));
-            node.addStyle(new Style())
-        }
+        // if(this.exist(parentId) == null) return;
+
+        // const parent = this.findById(parentId);
+        // if(!parent.hasChildren() && dimensionList.length > 0){
+        //     parent.addStyle(new Display("grid", ""));
+        //     parent.addStyle(new GridTemplateColumns(dimensionList[0].length, ""));
+        //     parent.addStyle(new GridTemplateRows(dimensionList.length, ""));
+        // }
+
+        // const nodeCache = new HashMap();
+
+        // for(let i=0; i<dimensionList.length; i++){
+        //     const columns = dimensionList[i];
+        //     let prevIndex = columns[0];
+        //     if(parent.exist(prevIndex)){
+        //         const node = parent.findById(prevIndex);
+        //         for(const style of node.style){
+        //             if(typeof style == GridColumn){
+
+        //             }
+        //         }
+        //     }
+        // }
     }
     print(){
         this.printHelper(this.head);

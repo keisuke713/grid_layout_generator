@@ -2,11 +2,11 @@ class Node{
     static space = "\t"
     static newLine = "\n"
 
-    constructor(id, tag, style, text, depth){
+    constructor(id, tag, text, depth){
         this.id        = id;
         this.tag       = tag;
-        // styleクラスの配列
-        this.style     = style;
+        // styleクラスのハッシュ
+        this.style     = new HashMap();
         this.text      = text;
         this.depth     = depth;
         this.children = [];
@@ -30,7 +30,7 @@ class Node{
         this.children.push(child);
     }
     addStyle(style){
-        this.style.push(style);
+        this.style.set(style.constructor.property, style);
     }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
