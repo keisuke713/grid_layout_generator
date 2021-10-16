@@ -14,7 +14,6 @@ class DOM{
             if(ele.id == id) return ele;
 
             for(const child of ele.children){
-                // if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
                 queue.push(child);
             }
         }
@@ -51,14 +50,14 @@ class DOM{
         }
         return;
     }
-    // updateNode(parentId, dimensionList){
-    //     if(this.exist(parentId) == null) return;
-    //     const node = this.findById(parentId);
-    //     if(!node.hasChildren() && dimensionList.length > 0){
-    //         node.addStyle(new Style("display", "grid", ""));
-    //         node.addStyle(new Style())
-    //     }
-    // }
+    updateNode(parentId, dimensionList){
+        if(this.exist(parentId) == null) return;
+        const node = this.findById(parentId);
+        if(!node.hasChildren() && dimensionList.length > 0){
+            node.addStyle(new Style("display", "grid", ""));
+            node.addStyle(new Style())
+        }
+    }
     print(){
         this.printHelper(this.head);
     }

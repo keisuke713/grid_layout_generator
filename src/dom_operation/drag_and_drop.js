@@ -412,7 +412,7 @@ function parseDom(parent){
         return newColumns;
     });
     console.log(newGrid);
-    // dom.updateNode(Number(selectedEle.dataset.id), newGrid);
+    dom.updateNode(Number(selectedEle.dataset.id), newGrid);
     console.log("parseDom:end");
 }
 
