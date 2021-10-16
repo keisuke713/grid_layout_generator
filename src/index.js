@@ -35,16 +35,16 @@
 // node7.style.push(new Style("width", "95", "%"));
 
 const styles = [
-    new Style("width", "100", "%"),
-    new Style("height", "100", "%"),
-    new Style("display", "grid", "")
+    new Width("100", "%"),
+    new Height("100", "%"),
+    new Display("grid", "")
 ]
 
 const parentNode = new Node(0, "div", styles, "", 0);
 
 const dom = new DOM(parentNode, document.getElementById("html-code"), document.getElementById("style-code"));
 
-// console.log(dom);
+console.log(dom);
 
 // dom.print();
 

@@ -1,5 +1,6 @@
 class GridTemplateColumns extends Style{
+    static property = "grid-template-columns";
     createStyleBody(){
-        return `${this.constructor.space}${this.getProperty()}: repeat(${this.getValue()}, 1fr);`
+        return `${this.constructor.space}${this.constructor.property}: repeat(${this.getValue()}, 1fr);`
     }
 }
