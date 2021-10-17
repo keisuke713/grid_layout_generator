@@ -10,7 +10,6 @@ class DOM{
 
         while(queue.length > 0){
             const ele = queue.shift();
-            console.log(ele);
             if(ele.id == id) return ele;
 
             for(const child of ele.children){
@@ -51,29 +50,52 @@ class DOM{
         return;
     }
     updateNode(parentId, dimensionList){
-        // if(this.exist(parentId) == null) return;
+        if(this.exist(parentId) == null) return;
 
-        // const parent = this.findById(parentId);
-        // if(!parent.hasChildren() && dimensionList.length > 0){
-        //     parent.addStyle(new Display("grid", ""));
-        //     parent.addStyle(new GridTemplateColumns(dimensionList[0].length, ""));
-        //     parent.addStyle(new GridTemplateRows(dimensionList.length, ""));
-        // }
+        const parent = this.findById(parentId);
+        if(!parent.hasChildren() && dimensionList.length > 0){
+            parent.addStyle(new Display("grid", ""));
+            parent.addStyle(new GridTemplateColumns(dimensionList[0].length, ""));
+            parent.addStyle(new GridTemplateRows(dimensionList.length, ""));
+        }
 
-        // const nodeCache = new HashMap();
+        const nodeCache = new HashMap();
 
-        // for(let i=0; i<dimensionList.length; i++){
-        //     const columns = dimensionList[i];
-        //     let prevIndex = columns[0];
-        //     if(parent.exist(prevIndex)){
-        //         const node = parent.findById(prevIndex);
-        //         for(const style of node.style){
-        //             if(typeof style == GridColumn){
+        for(let i=0; i<dimensionList.length; i++){
+            const columns = dimensionList[i];
+            let prevIndex = -1;
+            
+            for(let j=0; j<columns.length; j++){
+                const index = columns[j];
 
-        //             }
-        //         }
-        //     }
-        // }
+                if(parent.existChildById(index)){
+                    const node = parent.findChildById(index);
+
+                    if(!node.hasStyle("grid-column")){
+                        const value = new HashMap();
+                        value.set("start", null);
+                        value.set("end", null);
+                        node.addStyle(new GridColumn(value, "")); 
+                    }
+                    const gridColumn = node.findStyle("grid-column");
+                    if(prevIndex == index) gridColumn.updateEndColumnTo(j+2);
+                    else{
+                        gridColumn.updateStartColumnTo(j+1);
+                        gridColumn.updateEndColumnTo(j+2);
+                    }
+                }else{
+                    const node = new Node(index, "div", "", null);
+
+                    const value = new HashMap();
+                    value.set("start", j+1);
+                    value.set("end", j+2);
+
+                    node.addStyle(new GridColumn(value, ""));
+                    parent.addChild(node);
+                }
+                prevIndex = index;
+            }
+        }
     }
     print(){
         this.printHelper(this.head);
@@ -92,5 +114,10 @@ class DOM{
         });
 
         this.htmlParentNode.append(currNode.createLastHtmlTag());
+    }
+    test(){
+        for(const node of this.head.children){
+            console.log(node.findStyle("grid-column").toS());
+        }
     }
 }

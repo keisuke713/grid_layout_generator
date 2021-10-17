@@ -51,7 +51,7 @@ function addDivEle(){
         console.log(`width:${selectedEle.offsetWidth}`);
         alert("スペースがありません。")
     }
-    addElementToDom(selectedEle);
+
     parseDom(selectedEle);
 }
 
@@ -306,32 +306,6 @@ config.parentEle.addEventListener("click", event => {
     updateSelectedEle(event.target);
 })
 
-function addElementToDom(parent){
-    console.clear();
-    console.log("addElementToDom:start");
-    console.log(`parent id is${parent.dataset.id}`);
-    const parentNode = dom.findById(Number(parent.dataset.id));
-    if(parentNode == null){
-        console.log("parentNode not found");
-        return;
-    }
-
-    const childs = getChild(parent);
-
-    // domにnodeの追加
-    for(const child of childs){
-        if(parentNode.existChildById(Number(child.dataset.id))) continue;
-        const newNode = new Node(Number(child.dataset.id), "div", [], "", null);
-        dom.appnedNode(Number(parentNode.id), newNode);
-        break;
-    }
-    console.log("update dom");
-    console.log(dom);
-
-    console.log("addElementToDom:end");
-}
-function editDom(){}
-
 // 現在表示されているブロック要素をコードに変換していく
 // 現在選択されているノードとその子要素だけ見れば大丈夫そ？
 function parseDom(parent){
@@ -370,7 +344,7 @@ function parseDom(parent){
     // 横に伸びる要素があった場合の対処
     // 基準とする横幅を算定(一番小さい要素の幅とする)
     let starndardWidth = selectedEle.offsetWidth;
-    for(let i=0; i<childs.length-1; i++){
+    for(let i=0; i<childs.length; i++){
         const child = childs[i];
         starndardWidth = Math.min(starndardWidth, child.offsetWidth);
     }
@@ -413,6 +387,8 @@ function parseDom(parent){
     });
     console.log(newGrid);
     dom.updateNode(Number(selectedEle.dataset.id), newGrid);
+    // console.log(dom);
+    dom.test();
     console.log("parseDom:end");
 }
 

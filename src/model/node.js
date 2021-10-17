@@ -17,7 +17,7 @@ class Node{
         }
         return false;
     }
-    getChildById(id){
+    findChildById(id){
         for(const node of this.children){
             if(node.id == id) return node;
         }
@@ -31,6 +31,12 @@ class Node{
     }
     addStyle(style){
         this.style.set(style.constructor.property, style);
+    }
+    hasStyle(property){
+        return this.style.has(property);
+    }
+    findStyle(property){
+        return this.style.get(property);
     }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
@@ -49,6 +55,7 @@ class Node{
         return tag;
     }
     createStyleBodies(){
+        // styleをハッシュにしたから弄らないといけないかも
         return this.style.map(currStyle => {
             const body = document.createElement("p");
             body.innerText = currStyle.createStyleBody();
@@ -61,3 +68,5 @@ class Node{
         return tag;
     }
 }
+
+console.log("domクラスのupdateでstyleのstartがうまく行かない")
