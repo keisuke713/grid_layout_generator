@@ -49,22 +49,22 @@ class DOM{
         }
         return;
     }
-    updateNode(parentId, dimensionList){
+    updateNode(parentId, array2d){
         if(this.exist(parentId) == null) return;
 
         const parent = this.findById(parentId);
-        if(!parent.hasChildren() && dimensionList.length > 0){
+        if(!parent.hasChildren() && array2d.length > 0){
             parent.addStyle(new Display("grid", ""));
-            parent.addStyle(new GridTemplateColumns(dimensionList[0].length, ""));
-            parent.addStyle(new GridTemplateRows(dimensionList.length, ""));
+            parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
+            parent.addStyle(new GridTemplateRows(array2d.length, ""));
         }
 
         const nodeCache = new HashMap();
 
-        for(let i=0; i<dimensionList.length; i++){
-            const columns = dimensionList[i];
+        for(let i=0; i<array2d.length; i++){
+            const columns = array2d[i];
             let prevIndex = -1;
-            
+
             for(let j=0; j<columns.length; j++){
                 const index = columns[j];
 
@@ -121,3 +121,5 @@ class DOM{
         }
     }
 }
+
+console.log("nodeやstyleを作るfactoryを作成したい")

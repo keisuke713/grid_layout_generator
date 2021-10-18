@@ -392,6 +392,10 @@ function parseDom(parent){
     console.log("parseDom:end");
 }
 
+function updateNode(array2d){
+
+}
+
 function getPatterns(amountOfCell, amountOfPartition){
     const result = []
     getPatternsHelper(amountOfCell, amountOfPartition, 0, []);
