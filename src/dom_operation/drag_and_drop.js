@@ -52,7 +52,8 @@ function addDivEle(){
         alert("スペースがありません。")
     }
 
-    parseDom(selectedEle);
+    // parseDom(selectedEle);
+    updateNode(parseDom(selectedEle));
 }
 
 function createBox(numberOfBoxes){
@@ -275,7 +276,8 @@ function mousedownForResize(event){
             resize.style.width = `${width}px`;
         }
 
-        parseDom(selectedEle);
+        // parseDom(selectedEle);
+        updateNode(parseDom(selectedEle));
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -386,14 +388,62 @@ function parseDom(parent){
         return newColumns;
     });
     console.log(newGrid);
-    dom.updateNode(Number(selectedEle.dataset.id), newGrid);
+    // dom.updateNode(Number(selectedEle.dataset.id), newGrid);
     // console.log(dom);
-    dom.test();
+    // dom.test();
     console.log("parseDom:end");
+    return newGrid;
 }
 
+// domの更新はdom内部でなくクライアントサイドから行うようにする
 function updateNode(array2d){
+    const parentId = selectedEle.dataset.id;
+    if(!dom.exist(parentId)) return;
 
+    const parent = dom.findById(parentId);
+    if(!parent.hasChildren() && array2d.length > 0){
+        parent.addStyle(new Display("grid", ""));
+        parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
+        parent.addStyle(new GridTemplateRows(array2d.length, ""));
+    }
+
+    for(const columns of array2d){
+        let prevIndex = -1;
+
+        for(let i=0; i<columns.length; i++){
+            const index = columns[i];
+
+            if(parent.existChildById(index)){
+                const node = parent.findChildById(index);
+
+                if(!node.hasStyle("grid-column")){
+                    const value = new HashMap();
+                    value.set("start", null);
+                    value.set("end", null);
+                    node.addStyle(new GridColumn(value, ""));
+                }
+
+                const GridColumn = node.findStyle("grid-column");
+                if(prevIndex == index) GridColumn.updateEndColumnTo(i+2);
+                else{
+                    GridColumn.updateStartColumnTo(i+1);
+                    GridColumn.updateEndColumnTo(i+2);
+                }
+            }else{
+                const node = new Node(index, "div", "", null);
+
+                const value = new HashMap();
+                value.set("start", i+1);
+                value.set("end", i+2);
+
+                node.addStyle(new GridColumn(value, ""));
+                parent.addChild(node);
+            }
+            prevIndex = index;
+        }
+    }
+    console.log(dom.head);
+    dom.test();
 }
 
 function getPatterns(amountOfCell, amountOfPartition){
