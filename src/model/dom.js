@@ -124,5 +124,3 @@ class DOM{
         }
     }
 }
-
-console.log("nodeやstyleを作るfactoryを作成したい")

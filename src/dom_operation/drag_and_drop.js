@@ -412,31 +412,24 @@ function updateNode(array2d){
 
         for(let i=0; i<columns.length; i++){
             const index = columns[i];
+            const gridColumnFactory = new GridColumnFactory();
 
             if(parent.existChildById(index)){
                 const node = parent.findChildById(index);
 
-                if(!node.hasStyle("grid-column")){
-                    const value = new HashMap();
-                    value.set("start", null);
-                    value.set("end", null);
-                    node.addStyle(new GridColumn(value, ""));
-                }
+                if(node.hasStyle("grid-column")){
+                    const gridColumn = node.findStyle("grid-column");
 
-                const GridColumn = node.findStyle("grid-column");
-                if(prevIndex == index) GridColumn.updateEndColumnTo(i+2);
-                else{
-                    GridColumn.updateStartColumnTo(i+1);
-                    GridColumn.updateEndColumnTo(i+2);
+                    if(prevIndex != index) gridColumn.updateStartColumnTo(i+1);
+                    gridColumn.updateEndColumnTo(i+2);
+                }else{
+                    node.addStyle(gridColumnFactory.createGridColumn(i+1, i+2));
                 }
             }else{
                 const node = new Node(index, "div", "", null);
+                
+                node.addStyle(gridColumnFactory.createGridColumn(i+1, i+2));
 
-                const value = new HashMap();
-                value.set("start", i+1);
-                value.set("end", i+2);
-
-                node.addStyle(new GridColumn(value, ""));
                 parent.addChild(node);
             }
             prevIndex = index;
