@@ -407,6 +407,7 @@ function updateNode(array2d){
         parent.addStyle(new GridTemplateRows(array2d.length, ""));
     }
 
+    // grid-columnの設定
     for(const columns of array2d){
         let prevIndex = -1;
 
@@ -427,16 +428,43 @@ function updateNode(array2d){
                 }
             }else{
                 const node = new Node(index, "div", "", null);
-                
                 node.addStyle(gridColumnFactory.createGridColumn(i+1, i+2));
-
                 parent.addChild(node);
             }
             prevIndex = index;
         }
     }
+
+    // grid-rowの設定
+    const transposedArray2d = transpose(array2d);
+    for(const columns of transposedArray2d){
+        let prevIndex = -1;
+
+        for(let i=0; i<columns.length; i++){
+            const index = columns[i];
+            const gridRowFactory = new GridRowFactory();
+
+            if(parent.existChildById(index)){
+                const node = parent.findChildById(index);
+
+                if(node.hasStyle("grid-row")){
+                    const gridRow = node.findStyle("grid-row");
+
+                    if(prevIndex != index) gridRow.updateStartRowTo(i+1);
+                    gridRow.updateEndRowTo(i+2);
+                }else{
+                    node.addStyle(gridRowFactory.createGridRow(i+1, i+2));
+                }
+            }else{
+                const node = new Node(index, "div", "", null);
+                node.addStyle(gridRowFactory.createGridRow(i+1, i+2));
+            }
+            prevIndex = index;
+        }
+    }
+
     console.log(dom.head);
-    dom.test();
+    dom.print();
 }
 
 function getPatterns(amountOfCell, amountOfPartition){
@@ -486,4 +514,26 @@ function getChild(parent){
         if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
     }
     return childs;
+}
+
+function transpose(array2d){
+    if(!(isTrasposedArray(array2d))) return array2d;
+    const transposedArray = [];
+    
+    for(let i=0; i<array2d[0].length; i++){
+        const tmp = [];
+        for(let j=0; j<array2d.length; j++){
+            if(array2d[j][i] != null) tmp.push(array2d[j][i]);
+        }
+        transposedArray.push(tmp);
+    }
+    return transposedArray;
+}
+
+function isTrasposedArray(array){
+    if(array.length == 0) return false;
+    for(const ele of array){
+        if(!(ele instanceof Array)) return false;
+    }
+    return true;
 }

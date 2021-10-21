@@ -18,4 +18,7 @@ class HashMap{
     delete(key){
         this.map.delete(key);
     }
+    forEach(func){
+        this.map.forEach(func);
+    }
 }

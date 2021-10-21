@@ -101,6 +101,8 @@ class DOM{
     //     }
     // }
     print(){
+        this.htmlParentNode.innerText = "";
+        this.styleParentNode.innerText = "";
         this.printHelper(this.head);
     }
     printHelper(currNode){
@@ -120,7 +122,9 @@ class DOM{
     }
     test(){
         for(const node of this.head.children){
-            console.log(node.findStyle("grid-column").toS());
+            console.log("=============");
+            console.log(`girdColumn:${node.findStyle("grid-column").toS()}`);
+            console.log(`girdRow:${node.findStyle("grid-row").toS()}`);
         }
     }
 }

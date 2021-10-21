@@ -40,7 +40,7 @@ class Node{
     }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
-        tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id=div${this.id}>`
+        tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id="${this.tag}${this.id}">`
         if(this.text.length > 0) tag.innerText += `${Node.newLine}${Node.space.repeat(this.depth + 1)}${this.text}`
         return tag;
     }
@@ -55,12 +55,13 @@ class Node{
         return tag;
     }
     createStyleBodies(){
-        // styleをハッシュにしたから弄らないといけないかも
-        return this.style.map(currStyle => {
+        const bodyList = [];
+        this.style.forEach((value,key,map) => {
             const body = document.createElement("p");
-            body.innerText = currStyle.createStyleBody();
-            return body;
-        })
+            body.innerText = value.createStyleBody();
+            bodyList.push(body);
+        });
+        return bodyList;
     }
     createLastStyleTag(){
         const tag = document.createElement("p");
@@ -68,5 +69,3 @@ class Node{
         return tag;
     }
 }
-
-console.log("domクラスのupdateでstyleのstartがうまく行かない")
