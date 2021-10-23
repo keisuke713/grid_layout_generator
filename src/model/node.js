@@ -8,8 +8,8 @@ class Node{
         // styleクラスのハッシュ
         this.style     = new HashMap();
         this.text      = text;
-        this.depth     = depth;
         this.children = [];
+        this.depth = depth;
     }
     existChildById(id){
         for(const node of this.children){
@@ -40,7 +40,7 @@ class Node{
     }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
-        tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id="${this.tag}${this.id}">`
+        tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id="${this.tag}${this.id}>`
         if(this.text.length > 0) tag.innerText += `${Node.newLine}${Node.space.repeat(this.depth + 1)}${this.text}`
         return tag;
     }

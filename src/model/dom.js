@@ -128,3 +128,54 @@ class DOM{
         }
     }
 }
+
+class BinaryTree{
+    constructor(head){
+        this.head = head;
+    }
+    inOrder(){
+        this.inOrderHelper(this.head);
+    }
+    inOrderHelper(node){
+    }
+}
+
+class Node2{
+    constructor(val){
+        this.val = val;
+        this.children = [];
+    }
+    addChild(node){
+        this.children.push(node);
+    }
+}
+
+const node1  = new Node2(1);
+const node2  = new Node2(2);
+const node3  = new Node2(3);
+const node4  = new Node2(4);
+const node5  = new Node2(5);
+const node6  = new Node2(6);
+const node7  = new Node2(7);
+const node8  = new Node2(8);
+const node9  = new Node2(9);
+const node10 = new Node2(10);
+const node11 = new Node2(11);
+const node12 = new Node2(12);
+const node13 = new Node2(13);
+
+node1.addChild(node2);
+node1.addChild(node3);
+node2.addChild(node4);
+node2.addChild(node5);
+node2.addChild(node6);
+node3.addChild(node7);
+node3.addChild(node8);
+node4.addChild(node9);
+node4.addChild(node10);
+node6.addChild(node11);
+node8.addChild(node12);
+node8.addChild(node13);
+
+const tree = new BinaryTree(node1);
+tree.inOrder();

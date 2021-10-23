@@ -47,8 +47,6 @@ parentNode.addStyle(new Display("grid", ""));
 
 const dom = new DOM(parentNode, document.getElementById("html-code"), document.getElementById("style-code"));
 
-console.log(dom);
-
 // dom.print();
 
 

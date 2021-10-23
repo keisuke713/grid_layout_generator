@@ -388,9 +388,6 @@ function parseDom(parent){
         return newColumns;
     });
     console.log(newGrid);
-    // dom.updateNode(Number(selectedEle.dataset.id), newGrid);
-    // console.log(dom);
-    // dom.test();
     console.log("parseDom:end");
     return newGrid;
 }
@@ -427,7 +424,7 @@ function updateNode(array2d){
                     node.addStyle(gridColumnFactory.createGridColumn(i+1, i+2));
                 }
             }else{
-                const node = new Node(index, "div", "", null);
+                const node = new Node(index, "div", "", parent.depth + 1);
                 node.addStyle(gridColumnFactory.createGridColumn(i+1, i+2));
                 parent.addChild(node);
             }
@@ -462,8 +459,6 @@ function updateNode(array2d){
             prevIndex = index;
         }
     }
-
-    console.log(dom.head);
     dom.print();
 }
 
@@ -519,7 +514,7 @@ function getChild(parent){
 function transpose(array2d){
     if(!(isTrasposedArray(array2d))) return array2d;
     const transposedArray = [];
-    
+
     for(let i=0; i<array2d[0].length; i++){
         const tmp = [];
         for(let j=0; j<array2d.length; j++){
@@ -537,3 +532,7 @@ function isTrasposedArray(array){
     }
     return true;
 }
+
+console.log("========== issue ============");
+console.log("divのなかのdivがうまく表示されない");
+console.log("====================");
