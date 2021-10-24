@@ -403,12 +403,12 @@ function updateNode(array2d){
         parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
         parent.addStyle(new GridTemplateRows(array2d.length, ""));
     }
-    if(parent.hasStyle("grid-template-columns")){
-        const gridTemplateColumns = parent.findStyle("grid-template-columns");
+    if(parent.hasStyle(config.gridTemplateColumns)){
+        const gridTemplateColumns = parent.findStyle(config.gridTemplateColumns);
         gridTemplateColumns.updateValue(array2d[0].length);
     }
-    if(parent.hasStyle("grid-template-rows")){
-        const gridTemplateRows = parent.findStyle("grid-template-rows");
+    if(parent.hasStyle(config.gridTemplateRows)){
+        const gridTemplateRows = parent.findStyle(config.gridTemplateRows);
         gridTemplateRows.updateValue(array2d.length);
     }
 
@@ -423,8 +423,8 @@ function updateNode(array2d){
             if(parent.existChildById(index)){
                 const node = parent.findChildById(index);
 
-                if(node.hasStyle("grid-column")){
-                    const gridColumn = node.findStyle("grid-column");
+                if(node.hasStyle(config.gridColumn)){
+                    const gridColumn = node.findStyle(config.gridColumn);
 
                     if(prevIndex != index) gridColumn.updateStartColumnTo(i+1);
                     gridColumn.updateEndColumnTo(i+2);
@@ -452,8 +452,8 @@ function updateNode(array2d){
             if(parent.existChildById(index)){
                 const node = parent.findChildById(index);
 
-                if(node.hasStyle("grid-row")){
-                    const gridRow = node.findStyle("grid-row");
+                if(node.hasStyle(config.gridRow)){
+                    const gridRow = node.findStyle(config.gridRow);
 
                     if(prevIndex != index) gridRow.updateStartRowTo(i+1);
                     gridRow.updateEndRowTo(i+2);

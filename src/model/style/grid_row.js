@@ -1,5 +1,5 @@
 class GridRow extends Style{
-    static property = "grid-row";
+    static property = config.gridRow
     createStyleBody(){
         return `${this.constructor.space}${this.constructor.property}: ${this.getValue().get("start")}/${this.getValue().get("end")}`;
     }
