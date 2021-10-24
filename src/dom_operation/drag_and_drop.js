@@ -6,7 +6,7 @@ let numberOfBoxes = 1;
 function addDivEle(){
     const div = createBox(numberOfBoxes);
 
-    const childs = sortList(getChild(selectedEle), compareNodeFlexibility);
+    const childs = sortList(getChildren(selectedEle), compareNodeFlexibility);
 
     let top = config.gap;
     let left = config.gap;
@@ -314,7 +314,7 @@ function parseDom(parent){
     console.clear();
     console.log("parseDom:start");
 
-    const childs = sortList(getChild(selectedEle), compareNodeFlexibility);
+    const childs = sortList(getChildren(selectedEle), compareNodeFlexibility);
 
     let prevCols = [];
     let columns = [];
@@ -511,7 +511,7 @@ function matchRatio(columns, ratio, childsHash, width){
     return false;
 }
 
-function getChild(parent){
+function getChildren(parent){
     const childs = [];
     for(const child of parent.childNodes){
         if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
