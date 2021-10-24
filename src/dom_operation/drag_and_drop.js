@@ -6,14 +6,14 @@ let numberOfBoxes = 1;
 function addDivEle(){
     const div = createBox(numberOfBoxes);
 
-    const childs = sortList(getChildren(selectedEle), compareNodeFlexibility);
+    const children = sortList(getChildren(selectedEle), compareNodeFlexibility);
 
     let top = config.gap;
     let left = config.gap;
     let column = 0;
     let prevCols = [];
 
-    for(const child of childs){
+    for(const child of children){
         prevCols.push(child);
 
         if(top < (child.offsetTop + child.originalHeight)) break;
@@ -154,19 +154,19 @@ function mousedownForDrag(event){
             drag.style.left = `${originalLeft}px`;
         }
 
-        const childs = [];
+        const children = [];
         for(const child of parent.querySelectorAll(".box")){
-            if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+            if(child.nodeType == 1 && child.classList.contains("box")) children.push(child);
         }
     
-        childs.sort((a,b) => {
+        children.sort((a,b) => {
             if(a.offsetTop < b.offsetTop) return -1;
             if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
             return 1;
         });
 
         // dragの細かい動きはまだ決まっていないからコメントアウト
-        // for(const child of childs){
+        // for(const child of children){
         //     if(drag == child) continue;
         //     if(overlapAnotherEle(drag, child)){
         //         drag.style.top = `${originalTop}px`;
@@ -225,12 +225,12 @@ function mousedownForResize(event){
 
         const parent = resize.parentNode;
 
-        const childs = [];
+        const children = [];
         for(const child of parent.querySelectorAll(".box")){
-            if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+            if(child.nodeType == 1 && child.classList.contains("box")) children.push(child);
         }
     
-        childs.sort((a,b) => {
+        children.sort((a,b) => {
             if(a.offsetTop < b.offsetTop) return -1;
             if(a.offsetTop == b.offsetTop && a.offsetLeft < b.offsetLeft) return -1;
             return 1;
@@ -243,7 +243,7 @@ function mousedownForResize(event){
         // リサイズした要素と縦横幅両方かぶっている要素
         const bottomRightEles = [];
 
-        for(const child of childs){
+        for(const child of children){
             if(resize == child) continue;
             if(resize.offsetTop > child.offsetTop + child.offsetHeight) continue;
             if(resize.offsetLeft > child.offsetLeft + child.offsetWidth) continue;
@@ -314,48 +314,48 @@ function parseDom(parent){
     console.clear();
     console.log("parseDom:start");
 
-    const childs = sortList(getChildren(selectedEle), compareNodeFlexibility);
+    const children = sortList(getChildren(selectedEle), compareNodeFlexibility);
 
     let prevCols = [];
     let columns = [];
     const grid = [];
 
-    for(let i=0; i<childs.length; i++){
-        const child = childs[i];
+    for(let i=0; i<children.length; i++){
+        const child = children[i];
 
         prevCols.push(child);
         columns.push(Number(child.dataset.id));
 
         // 行が変わるもしくは最後の要素
-        if(childs[i+1] != null && (childs[i+1].offsetTop - child.offsetTop) <= 10) continue;
+        if(children[i+1] != null && (children[i+1].offsetTop - child.offsetTop) <= 10) continue;
         grid.push(columns);
-        if(childs[i+1] != null){
+        if(children[i+1] != null){
             columns = [];
 
             for(let j=0; j<prevCols.length; j++){
                 const prevCol = prevCols[j];
-                if((prevCol.offsetTop + prevCol.offsetHeight) > childs[i+1].offsetTop){
+                if((prevCol.offsetTop + prevCol.offsetHeight) > children[i+1].offsetTop){
                     columns.splice(j, 0, Number(prevCol.dataset.id));
                 }
             }
             prevCols = prevCols.filter(ele => {
-                return (ele.offsetTop + ele.offsetHeight) > childs[i+1].offsetTop;
+                return (ele.offsetTop + ele.offsetHeight) > children[i+1].offsetTop;
             })
         }
     }
     // 横に伸びる要素があった場合の対処
     // 基準とする横幅を算定(一番小さい要素の幅とする)
     let starndardWidth = selectedEle.offsetWidth;
-    for(let i=0; i<childs.length; i++){
-        const child = childs[i];
+    for(let i=0; i<children.length; i++){
+        const child = children[i];
         starndardWidth = Math.min(starndardWidth, child.offsetWidth);
     }
     // 要素の幅の基準については現在存在する要素のなかで一番小さい幅を採用
     const maxColumns = Math.floor(selectedEle.offsetWidth / starndardWidth);
     const patternCache = new HashMap();
-    const childsHash = new HashMap();
-    for(const child of childs){
-        childsHash.set(Number(child.dataset.id), child.offsetWidth);
+    const childrenHash = new HashMap();
+    for(const child of children){
+        childrenHash.set(Number(child.dataset.id), child.offsetWidth);
     }
     const newGrid = grid.map(columns => {
         if(columns.length == maxColumns) return columns;
@@ -373,7 +373,7 @@ function parseDom(parent){
         for(const pattern of patterns){
             const widthRatio = getRatio(pattern);
 
-            if(matchRatio(columns, widthRatio, childsHash, starndardWidth)){
+            if(matchRatio(columns, widthRatio, childrenHash, starndardWidth)){
                 for(let i=0; i<columns.length; i++){
                     let count = widthRatio[i];
                     while(0 < count){
@@ -501,9 +501,9 @@ function getRatio(pattern){
     return ratio;
 }
 
-function matchRatio(columns, ratio, childsHash, width){
+function matchRatio(columns, ratio, childrenHash, width){
     for(let i=0; i<columns.length; i++){
-        const childNodeWidth = childsHash.get(columns[i]);
+        const childNodeWidth = childrenHash.get(columns[i]);
         if(childNodeWidth == null) break;
         if(!(Math.abs(childNodeWidth - width * ratio[i]) < Math.abs(childNodeWidth - width * (ratio[i] - 1)) && Math.abs(childNodeWidth - width * ratio[i]) < Math.abs(childNodeWidth - width * (ratio[i] + 1)))) break;
         if(i == columns.length - 1) return true;
@@ -512,11 +512,11 @@ function matchRatio(columns, ratio, childsHash, width){
 }
 
 function getChildren(parent){
-    const childs = [];
+    const children = [];
     for(const child of parent.childNodes){
-        if(child.nodeType == 1 && child.classList.contains("box")) childs.push(child);
+        if(child.nodeType == 1 && child.classList.contains("box")) children.push(child);
     }
-    return childs;
+    return children;
 }
 
 function transpose(array2d){
