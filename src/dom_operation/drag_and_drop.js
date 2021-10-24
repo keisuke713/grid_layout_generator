@@ -403,6 +403,14 @@ function updateNode(array2d){
         parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
         parent.addStyle(new GridTemplateRows(array2d.length, ""));
     }
+    if(parent.hasStyle("grid-template-columns")){
+        const gridTemplateColumns = parent.findStyle("grid-template-columns");
+        gridTemplateColumns.updateValue(array2d[0].length);
+    }
+    if(parent.hasStyle("grid-template-rows")){
+        const gridTemplateRows = parent.findStyle("grid-template-rows");
+        gridTemplateRows.updateValue(array2d.length);
+    }
 
     // grid-columnの設定
     for(const columns of array2d){
@@ -534,5 +542,5 @@ function isTrasposedArray(array){
 }
 
 console.log("========== issue ============");
-console.log("divのなかのdivがうまく表示されない");
+console.log("縦に長くするとrowの数が少ない");
 console.log("====================");
