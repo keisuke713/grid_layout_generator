@@ -53,7 +53,10 @@ function addDivEle(){
     }
 
     // parseDom(selectedEle);
-    updateNode(parseDom(selectedEle));
+    console.log("parseDOm2start");
+    console.log(parseDom2(selectedEle));
+    console.log("parseDom2end")
+    // updateNode(parseDom(selectedEle));
 }
 
 function createBox(numberOfBoxes){
@@ -277,7 +280,10 @@ function mousedownForResize(event){
         }
 
         // parseDom(selectedEle);
-        updateNode(parseDom(selectedEle));
+        console.log("parseDOm2start");
+        console.log(parseDom2(selectedEle));
+        console.log("parseDom2end")
+        // updateNode(parseDom(selectedEle));
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -345,13 +351,13 @@ function parseDom(parent){
     }
     // 横に伸びる要素があった場合の対処
     // 基準とする横幅を算定(一番小さい要素の幅とする)
-    let starndardWidth = selectedEle.offsetWidth;
+    let standardWidth = selectedEle.offsetWidth;
     for(let i=0; i<children.length; i++){
         const child = children[i];
-        starndardWidth = Math.min(starndardWidth, child.offsetWidth);
+        standardWidth = Math.min(standardWidth, child.offsetWidth);
     }
     // 要素の幅の基準については現在存在する要素のなかで一番小さい幅を採用
-    const maxColumns = Math.floor(selectedEle.offsetWidth / starndardWidth);
+    const maxColumns = Math.floor(selectedEle.offsetWidth / standardWidth);
     const patternCache = new HashMap();
     const childrenHash = new HashMap();
     for(const child of children){
@@ -373,7 +379,7 @@ function parseDom(parent){
         for(const pattern of patterns){
             const widthRatio = getRatio(pattern);
 
-            if(matchRatio(columns, widthRatio, childrenHash, starndardWidth)){
+            if(matchRatio(columns, widthRatio, childrenHash, standardWidth)){
                 for(let i=0; i<columns.length; i++){
                     let count = widthRatio[i];
                     while(0 < count){
@@ -541,6 +547,66 @@ function isTrasposedArray(array){
     return true;
 }
 
+function parseDom2(parent){
+    console.clear();
+    console.log("parseDom:start");
+
+    const children = sortList(getChildren(parent), compareNodeFlexibility);
+
+    let standardWidth = parent.offsetWidth;
+    let standardHeight = parent.offsetHeight;
+    for(const child of children){
+        standardWidth = Math.min(standardWidth, child.offsetWidth);
+        standardHeight = Math.min(standardHeight, child.offsetHeight);
+    }
+
+    const grid = [];
+    let rowIndex = 0;
+    let prevOffsetLeft = -1;
+    for(let i=0; i<children.length; i++){
+        const child = children[i];
+        if(prevOffsetLeft > child.offsetLeft) rowIndex++;
+        
+        // 縦に要素をみていく
+        const heightDiffCache = [];
+        for(let i=0; i<=Math.ceil(child.offsetHeight / standardHeight); i++){
+            heightDiffCache.push(Math.abs(child.offsetHeight - standardHeight * i));
+        }
+
+        let heightIndex = 1;
+        for(let i=2; i<heightDiffCache.length; i++){
+            if(heightDiffCache[heightIndex] > heightDiffCache[i]) heightIndex = i;
+        }
+
+        for(let i=rowIndex; i<rowIndex+heightIndex; i++){
+            if(grid[i] == undefined) grid[i] = [];
+            grid[i].push(Number(child.dataset.id));
+        }
+
+        // 横に要素をみていく
+        const widthDiffCache = [];
+        for(let i=0; i<=Math.ceil(child.offsetWidth / standardWidth); i++){
+            widthDiffCache.push(Math.abs(child.offsetWidth - standardWidth * i));
+        }
+
+        let widthIndex = 1;
+        for(let i=2; i<widthDiffCache.length; i++){
+            if(widthDiffCache[widthIndex] > widthDiffCache[i]) widthIndex = i;
+        }
+
+        for(let i=rowIndex; i<grid.length; i++){
+            if(grid[grid.length - 1] != Number(child.dataset.id)) continue;
+            for(let j=1; j<widthIndex; j++){
+                grid[i].push(Number(child.dataset.id));
+            }
+        }
+
+        prevOffsetLeft = child.offsetLeft + child.offsetWidth;
+    }
+    return grid;
+    console.log("parseDom:end");
+}
+
 console.log("========== issue ============");
-console.log("縦に長くするとrowの数が少ない");
+console.log("右側に大きいのを配置すると挙動がおかしくなる");
 console.log("====================");
