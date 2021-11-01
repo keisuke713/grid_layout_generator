@@ -562,14 +562,13 @@ function parseDom2(parent){
 
     const grid = [];
     let rowIndex = 0;
-    let columnIndex = -1;
+    let columnIndex = 0;
     let prevOffsetLeft = -1;
     for(let i=0; i<children.length; i++){
         const child = children[i]
-        columnIndex++;
         if(prevOffsetLeft > child.offsetLeft){
             rowIndex++;
-            
+
             if (grid[rowIndex] == undefined){
                 columnIndex = 0;
             }else{
@@ -580,6 +579,10 @@ function parseDom2(parent){
                     }
                 }
             }
+        }
+
+        while(grid[rowIndex] != undefined && grid[rowIndex][columnIndex] != undefined){
+            columnIndex++;
         }
 
         // 縦に要素をみていく
