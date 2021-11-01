@@ -562,11 +562,26 @@ function parseDom2(parent){
 
     const grid = [];
     let rowIndex = 0;
+    let columnIndex = -1;
     let prevOffsetLeft = -1;
     for(let i=0; i<children.length; i++){
-        const child = children[i];
-        if(prevOffsetLeft > child.offsetLeft) rowIndex++;
-        
+        const child = children[i]
+        columnIndex++;
+        if(prevOffsetLeft > child.offsetLeft){
+            rowIndex++;
+            
+            if (grid[rowIndex] == undefined){
+                columnIndex = 0;
+            }else{
+                for(let i=0; i<grid[rowIndex].length; i++){
+                    if(grid[rowIndex][i] == undefined || i == grid[rowIndex].length - 1){
+                        columnIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
         // 縦に要素をみていく
         const heightDiffCache = [];
         for(let i=0; i<=Math.ceil(child.offsetHeight / standardHeight); i++){
@@ -579,8 +594,8 @@ function parseDom2(parent){
         }
 
         for(let i=rowIndex; i<rowIndex+heightIndex; i++){
-            if(grid[i] == undefined) grid[i] = [];
-            grid[i].push(Number(child.dataset.id));
+            if(grid[i] == undefined) grid[i] = new Array(columnIndex+1);
+            grid[i].splice(columnIndex, 1, Number(child.dataset.id));
         }
 
         // 横に要素をみていく
@@ -594,10 +609,9 @@ function parseDom2(parent){
             if(widthDiffCache[widthIndex] > widthDiffCache[i]) widthIndex = i;
         }
 
-        for(let i=rowIndex; i<grid.length; i++){
-            if(grid[grid.length - 1] != Number(child.dataset.id)) continue;
+        for(let i=rowIndex; i<rowIndex + heightIndex; i++){
             for(let j=1; j<widthIndex; j++){
-                grid[i].push(Number(child.dataset.id));
+                grid[i].splice(columnIndex + j - 1, 0, Number(child.dataset.id));
             }
         }
 
@@ -608,5 +622,5 @@ function parseDom2(parent){
 }
 
 console.log("========== issue ============");
-console.log("右側に大きいのを配置すると挙動がおかしくなる");
+console.log("うまく行かないパターンがまだあるのでそれを直す");
 console.log("====================");
