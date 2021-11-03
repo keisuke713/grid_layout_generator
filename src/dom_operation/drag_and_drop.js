@@ -597,7 +597,11 @@ function parseDom2(parent){
         }
 
         for(let i=rowIndex; i<rowIndex+heightIndex; i++){
-            if(grid[i] == undefined) grid[i] = new Array(columnIndex+1);
+            if(grid[i] == undefined){
+                const length = grid[i-1] == undefined ? columnIndex + 1 : grid[i-1].length;
+                grid[i] = new Array(length);
+            }
+            while(grid[i].length <= columnIndex){grid[i].push(undefined)}
             grid[i].splice(columnIndex, 1, Number(child.dataset.id));
         }
 
@@ -614,7 +618,11 @@ function parseDom2(parent){
 
         for(let i=rowIndex; i<rowIndex + heightIndex; i++){
             for(let j=1; j<widthIndex; j++){
-                grid[i].splice(columnIndex + j - 1, 0, Number(child.dataset.id));
+                if(grid[i].length <= columnIndex){
+                    grid[i].splice(columnIndex + j, 0, Number(child.dataset.id));
+                }else{
+                    grid[i].splice(columnIndex + j, 1, Number(child.dataset.id));
+                }
             }
         }
 
