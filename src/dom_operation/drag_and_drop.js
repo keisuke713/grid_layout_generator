@@ -52,11 +52,7 @@ function addDivEle(){
         alert("スペースがありません。")
     }
 
-    // parseDom(selectedEle);
-    console.log("parseDOm2start");
-    console.log(parseDom2(selectedEle));
-    console.log("parseDom2end")
-    // updateNode(parseDom(selectedEle));
+    updateNode(parseDom(selectedEle));
 }
 
 function createBox(numberOfBoxes){
@@ -279,11 +275,7 @@ function mousedownForResize(event){
             resize.style.width = `${width}px`;
         }
 
-        // parseDom(selectedEle);
-        console.log("parseDOm2start");
-        console.log(parseDom2(selectedEle));
-        console.log("parseDom2end")
-        // updateNode(parseDom(selectedEle));
+        updateNode(parseDom(selectedEle));
     }
 
     ele.addEventListener("mouseup", mouseupForResize, false);
@@ -316,87 +308,87 @@ config.parentEle.addEventListener("click", event => {
 
 // 現在表示されているブロック要素をコードに変換していく
 // 現在選択されているノードとその子要素だけ見れば大丈夫そ？
-function parseDom(parent){
-    console.clear();
-    console.log("parseDom:start");
+// function parseDom(parent){
+//     console.clear();
+//     console.log("parseDom:start");
 
-    const children = sortList(getChildren(selectedEle), compareNodeFlexibility);
+//     const children = sortList(getChildren(selectedEle), compareNodeFlexibility);
 
-    let prevCols = [];
-    let columns = [];
-    const grid = [];
+//     let prevCols = [];
+//     let columns = [];
+//     const grid = [];
 
-    for(let i=0; i<children.length; i++){
-        const child = children[i];
+//     for(let i=0; i<children.length; i++){
+//         const child = children[i];
 
-        prevCols.push(child);
-        columns.push(Number(child.dataset.id));
+//         prevCols.push(child);
+//         columns.push(Number(child.dataset.id));
 
-        // 行が変わるもしくは最後の要素
-        if(children[i+1] != null && (children[i+1].offsetTop - child.offsetTop) <= 10) continue;
-        grid.push(columns);
-        if(children[i+1] != null){
-            columns = [];
+//         // 行が変わるもしくは最後の要素
+//         if(children[i+1] != null && (children[i+1].offsetTop - child.offsetTop) <= 10) continue;
+//         grid.push(columns);
+//         if(children[i+1] != null){
+//             columns = [];
 
-            for(let j=0; j<prevCols.length; j++){
-                const prevCol = prevCols[j];
-                if((prevCol.offsetTop + prevCol.offsetHeight) > children[i+1].offsetTop){
-                    columns.splice(j, 0, Number(prevCol.dataset.id));
-                }
-            }
-            prevCols = prevCols.filter(ele => {
-                return (ele.offsetTop + ele.offsetHeight) > children[i+1].offsetTop;
-            })
-        }
-    }
-    // 横に伸びる要素があった場合の対処
-    // 基準とする横幅を算定(一番小さい要素の幅とする)
-    let standardWidth = selectedEle.offsetWidth;
-    for(let i=0; i<children.length; i++){
-        const child = children[i];
-        standardWidth = Math.min(standardWidth, child.offsetWidth);
-    }
-    // 要素の幅の基準については現在存在する要素のなかで一番小さい幅を採用
-    const maxColumns = Math.floor(selectedEle.offsetWidth / standardWidth);
-    const patternCache = new HashMap();
-    const childrenHash = new HashMap();
-    for(const child of children){
-        childrenHash.set(Number(child.dataset.id), child.offsetWidth);
-    }
-    const newGrid = grid.map(columns => {
-        if(columns.length == maxColumns) return columns;
+//             for(let j=0; j<prevCols.length; j++){
+//                 const prevCol = prevCols[j];
+//                 if((prevCol.offsetTop + prevCol.offsetHeight) > children[i+1].offsetTop){
+//                     columns.splice(j, 0, Number(prevCol.dataset.id));
+//                 }
+//             }
+//             prevCols = prevCols.filter(ele => {
+//                 return (ele.offsetTop + ele.offsetHeight) > children[i+1].offsetTop;
+//             })
+//         }
+//     }
+//     // 横に伸びる要素があった場合の対処
+//     // 基準とする横幅を算定(一番小さい要素の幅とする)
+//     let standardWidth = selectedEle.offsetWidth;
+//     for(let i=0; i<children.length; i++){
+//         const child = children[i];
+//         standardWidth = Math.min(standardWidth, child.offsetWidth);
+//     }
+//     // 要素の幅の基準については現在存在する要素のなかで一番小さい幅を採用
+//     const maxColumns = Math.floor(selectedEle.offsetWidth / standardWidth);
+//     const patternCache = new HashMap();
+//     const childrenHash = new HashMap();
+//     for(const child of children){
+//         childrenHash.set(Number(child.dataset.id), child.offsetWidth);
+//     }
+//     const newGrid = grid.map(columns => {
+//         if(columns.length == maxColumns) return columns;
 
-        // このラムダの中の最終的な戻り値
-        const newColumns = [];
+//         // このラムダの中の最終的な戻り値
+//         const newColumns = [];
 
-        let patterns;
-        if(patternCache.has(columns.length)) patterns = patternCache.get(columns.length);
-        else{
-            patterns = getPatterns(maxColumns, columns.length - 1);
-            patternCache.set(columns.length, patterns);
-        }
+//         let patterns;
+//         if(patternCache.has(columns.length)) patterns = patternCache.get(columns.length);
+//         else{
+//             patterns = getPatterns(maxColumns, columns.length - 1);
+//             patternCache.set(columns.length, patterns);
+//         }
 
-        for(const pattern of patterns){
-            const widthRatio = getRatio(pattern);
+//         for(const pattern of patterns){
+//             const widthRatio = getRatio(pattern);
 
-            if(matchRatio(columns, widthRatio, childrenHash, standardWidth)){
-                for(let i=0; i<columns.length; i++){
-                    let count = widthRatio[i];
-                    while(0 < count){
-                        newColumns.push(columns[i]);
-                        count--;
-                    }
-                }
-                break;
-            }
-        }
+//             if(matchRatio(columns, widthRatio, childrenHash, standardWidth)){
+//                 for(let i=0; i<columns.length; i++){
+//                     let count = widthRatio[i];
+//                     while(0 < count){
+//                         newColumns.push(columns[i]);
+//                         count--;
+//                     }
+//                 }
+//                 break;
+//             }
+//         }
 
-        return newColumns;
-    });
-    console.log(newGrid);
-    console.log("parseDom:end");
-    return newGrid;
-}
+//         return newColumns;
+//     });
+//     console.log(newGrid);
+//     console.log("parseDom:end");
+//     return newGrid;
+// }
 
 // domの更新はdom内部でなくクライアントサイドから行うようにする
 function updateNode(array2d){
@@ -547,7 +539,7 @@ function isTrasposedArray(array){
     return true;
 }
 
-function parseDom2(parent){
+function parseDom(parent){
     console.clear();
     console.log("parseDom:start");
 
@@ -628,10 +620,11 @@ function parseDom2(parent){
 
         prevOffsetLeft = child.offsetLeft + child.offsetWidth;
     }
+    console.log(grid);
     return grid;
     console.log("parseDom:end");
 }
 
 console.log("========== issue ============");
-console.log("うまく行かないパターンがまだあるのでそれを直す");
+console.log("parseDomを2に移管しよう");
 console.log("====================");
