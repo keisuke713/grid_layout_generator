@@ -308,6 +308,7 @@ config.parentEle.addEventListener("click", event => {
 
 // domの更新はdom内部でなくクライアントサイドから行うようにする
 function updateNode(array2d){
+    console.log(array2d);
     const parentId = selectedEle.dataset.id;
     if(!dom.exist(parentId)) return;
 
@@ -332,6 +333,7 @@ function updateNode(array2d){
 
         for(let i=0; i<columns.length; i++){
             const index = columns[i];
+            if(index == undefined) continue;
             const gridColumnFactory = new GridColumnFactory();
 
             if(parent.existChildById(index)){
@@ -382,25 +384,6 @@ function updateNode(array2d){
         }
     }
     dom.print();
-}
-
-function getPatterns(amountOfCell, amountOfPartition){
-    const result = []
-    getPatternsHelper(amountOfCell, amountOfPartition, 0, []);
-
-    function getPatternsHelper(amountOfCell, amountOfPartition, startIndex, patterns){
-        if(amountOfPartition < 1){
-            patterns.push(amountOfCell-1);
-            result.push(patterns);
-            return;
-        }
-        for(let i=startIndex; i<amountOfCell-1; i++){
-            const patternCopy = JSON.parse(JSON.stringify(patterns));
-            patternCopy.push(i);
-            getPatternsHelper(amountOfCell, amountOfPartition-1, i+1, patternCopy);
-        }
-    }
-    return result;
 }
 
 function getChildren(parent){
@@ -514,9 +497,8 @@ function parseDom(parent){
 
         prevOffsetLeft = child.offsetLeft + child.offsetWidth;
     }
-    console.log(grid);
-    return grid;
     console.log("parseDom:end");
+    return grid;
 }
 
 console.log("========== issue ============");
