@@ -307,8 +307,7 @@ config.parentEle.addEventListener("click", event => {
 })
 
 // domの更新はdom内部でなくクライアントサイドから行うようにする
-function updateNode(array2d){
-    console.log(array2d);
+function updateNode2(array2d){
     const parentId = selectedEle.dataset.id;
     if(!dom.exist(parentId)) return;
 
@@ -363,6 +362,7 @@ function updateNode(array2d){
 
         for(let i=0; i<columns.length; i++){
             const index = columns[i];
+            if(index == undefined) continue;
             const gridRowFactory = new GridRowFactory();
 
             if(parent.existChildById(index)){
@@ -379,6 +379,63 @@ function updateNode(array2d){
             }else{
                 const node = new Node(index, "div", "", null);
                 node.addStyle(gridRowFactory.createGridRow(i+1, i+2));
+                parent.addChild(node);
+            }
+            prevIndex = index;
+        }
+    }
+    dom.print();
+}
+
+function updateNode(array2d){
+    const parentId = selectedEle.dataset.id;
+    if(!dom.exist(parentId)) return;
+
+    const parent = dom.findById(parentId);
+    if(!parent.hasChildren() && array2d.length > 0 ){
+        parent.addStyle(new Display("grid", ""));
+        parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
+        parent.addStyle(new GridTemplateRows(array2d.length, ""));
+    }else{
+        parent.findStyle(config.gridTemplateColumns).updateValue(array2d[0].length);
+        parent.findStyle(config.gridTemplateRows).updateValue(array2d.length);
+    }
+
+    for(const columns of array2d){
+        let prevIndex = -1;
+
+        for(let i=0; i<columns.length; i++){
+            const index = columns[i];
+            if(index == undefined) continue;
+            const gridColumnFactory = new GridColumnFactory();
+
+            if(parent.existChildById(index)){
+                parent.findChildById(index).updateGridColumn(prevIndex, index, i);
+            }else{
+                const node = new Node(index, "div", "", parent.depth + 1);
+                node.addStyle(gridColumnFactory.createGridColumn(i+1, i+2));
+                parent.addChild(node);
+            }
+            prevIndex = index;
+        }
+    }
+
+    for(const columns of transpose(array2d)){
+        let prevIndex = -1;
+
+        for(let i=0; i<columns.length; i++){
+            const index = columns[i];
+            if(index == undefined) continue;
+            const gridRowFactory = new GridRowFactory();
+
+            if(parent.existChildById(index)){
+                const node = parent.findChildById(index);
+                if(node.hasStyle(config.gridRow))node.updateGridRow(prevIndex, index, i);
+                else node.addStyle(gridRowFactory.createGridRow(i+1, i+2));
+            }else{
+                const node = new Node(index, "div", "", parent.depth + 1);
+                node.addStyle(gridRowFactory.createGridRow(i+1, i+2));
+                parent.addChild(node);
             }
             prevIndex = index;
         }

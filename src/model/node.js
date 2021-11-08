@@ -38,6 +38,16 @@ class Node{
     findStyle(property){
         return this.style.get(property);
     }
+    updateGridColumn(prevIndex, index, start){
+        const gridColumn = this.findStyle(config.gridColumn);
+        if(prevIndex != index) gridColumn.updateStartColumnTo(start+1);
+        gridColumn.updateEndColumnTo(start+2);
+    }
+    updateGridRow(prevIndex, index, start){
+        const gridRow = this.findStyle(config.gridRow);
+        if(prevIndex != index) gridRow.updateStartRowTo(start+1);
+        gridRow.updateEndRowTo(start+2);
+    }
     createFirstHtmlTag(){
         const tag = document.createElement("p");
         tag.innerText = `${Node.space.repeat(this.depth)}<${this.tag} id="${this.tag}${this.id}>`
