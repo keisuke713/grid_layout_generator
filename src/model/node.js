@@ -32,6 +32,16 @@ class Node{
     addStyle(style){
         this.style.set(style.constructor.property, style);
     }
+    addGridProperty(array2d){
+        if(!this.hasChildren() && array2d.length > 0){
+            this.addStyle(new Display("grid", ""));
+            this.addStyle(new GridTemplateColumns(array2d[0].length, ""));
+            this.addStyle(new GridTemplateRows(array2d.length, ""));
+        }else{
+            this.findStyle(config.gridTemplateColumns).updateValue(array2d[0].length);
+            this.findStyle(config.gridTemplateRows).updateValue(array2d.length);
+        }
+    }
     hasStyle(property){
         return this.style.has(property);
     }

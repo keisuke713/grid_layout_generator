@@ -392,14 +392,7 @@ function updateNode(array2d){
     if(!dom.exist(parentId)) return;
 
     const parent = dom.findById(parentId);
-    if(!parent.hasChildren() && array2d.length > 0 ){
-        parent.addStyle(new Display("grid", ""));
-        parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
-        parent.addStyle(new GridTemplateRows(array2d.length, ""));
-    }else{
-        parent.findStyle(config.gridTemplateColumns).updateValue(array2d[0].length);
-        parent.findStyle(config.gridTemplateRows).updateValue(array2d.length);
-    }
+    parent.addGridProperty(array2d);
 
     for(const columns of array2d){
         let prevIndex = -1;
