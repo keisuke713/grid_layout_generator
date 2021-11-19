@@ -49,57 +49,6 @@ class DOM{
         }
         return;
     }
-    // addStyle(nodeId, style){
-    //     if(!this.exist(nodeId)) return;
-    //     this.findById(nodeId).addStyle(style);
-    // }
-    // お蔵入り
-    // updateNode(parentId, array2d){
-    //     if(this.exist(parentId)) return;
-
-    //     const parent = this.findById(parentId);
-    //     if(!parent.hasChildren() && array2d.length > 0){
-    //         parent.addStyle(new Display("grid", ""));
-    //         parent.addStyle(new GridTemplateColumns(array2d[0].length, ""));
-    //         parent.addStyle(new GridTemplateRows(array2d.length, ""));
-    //     }
-
-    //     for(let i=0; i<array2d.length; i++){
-    //         const columns = array2d[i];
-    //         let prevIndex = -1;
-
-    //         for(let j=0; j<columns.length; j++){
-    //             const index = columns[j];
-
-    //             if(parent.existChildById(index)){
-    //                 const node = parent.findChildById(index);
-
-    //                 if(!node.hasStyle("grid-column")){
-    //                     const value = new HashMap();
-    //                     value.set("start", null);
-    //                     value.set("end", null);
-    //                     node.addStyle(new GridColumn(value, "")); 
-    //                 }
-    //                 const gridColumn = node.findStyle("grid-column");
-    //                 if(prevIndex == index) gridColumn.updateEndColumnTo(j+2);
-    //                 else{
-    //                     gridColumn.updateStartColumnTo(j+1);
-    //                     gridColumn.updateEndColumnTo(j+2);
-    //                 }
-    //             }else{
-    //                 const node = new Node(index, "div", "", null);
-
-    //                 const value = new HashMap();
-    //                 value.set("start", j+1);
-    //                 value.set("end", j+2);
-
-    //                 node.addStyle(new GridColumn(value, ""));
-    //                 parent.addChild(node);
-    //             }
-    //             prevIndex = index;
-    //         }
-    //     }
-    // }
     print(){
         this.htmlParentNode.innerText = "";
         this.styleParentNode.innerText = "";

@@ -552,6 +552,5 @@ function parseDom(parent){
 }
 
 console.log("========== issue ============");
-console.log("updateNodeをもう少しきれいに仕様");
-console.log("parseDomを100行近くあるから何とかしたい")
+console.log("parseDomが100行近くあるから何とかしたい")
 console.log("====================");
