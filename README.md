@@ -11,3 +11,7 @@ cssのdisplayプロパティのgridバリューを用いて作るレイアウト
 レイアウトが出来ましたら右側にhtmlとcssのコードが表示されるのでcopyボタンを押してご自身のファイルにペーストされたら完成です！！！
 12/24日現在コピー機能はまだ出来ていません。。。
 
+
+
+https://user-images.githubusercontent.com/42457215/147356624-cc567b0f-f34f-42b5-8ea5-77f33b00b78c.mov
+
